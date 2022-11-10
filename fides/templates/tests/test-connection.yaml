@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "fides.fullname" . }}-test"
+  labels:
+    {{- include "fides.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: fides
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "fides.fullname" . }}:{{ .Values.fides.service.port }}']
+    - name: privacy-center
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "fides.privacyCenter.fullname" . }}:{{ .Values.privacyCenter.service.port }}']
+  restartPolicy: Never
