@@ -4,3 +4,6 @@
 
 # Local values
 **/*values.local.yaml
+
+### Fides ###
+fides.toml

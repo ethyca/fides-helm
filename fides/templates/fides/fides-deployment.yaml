@@ -1,3 +1,5 @@
+{{- $volume := "config" }}
+{{- $configPath := "/etc/fides/config" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,6 +10,11 @@ spec:
   selector:
     matchLabels:
       {{- include "fides.fides.selectorLabels" . | nindent 6 }}
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -31,6 +38,8 @@ spec:
           image: "{{ .Values.fides.image.repository }}:{{ .Values.fides.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.fides.image.pullPolicy }}
           env:
+            - name: FIDES__CONFIG_PATH
+              value: {{ printf "%s/fides.toml" $configPath }}
             {{- include "fides.env" . | nindent 12 }}
           envFrom:
             - secretRef: 
@@ -41,14 +50,25 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /heatlh
+              path: /
               port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /health
               port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          volumeMounts:
+          - name: {{ $volume }}
+            mountPath: {{ $configPath }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: {{ $volume }}
+          configMap:
+            name: {{ include "fides.tomlConfigMapName" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

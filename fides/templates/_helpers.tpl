@@ -114,24 +114,36 @@ Create the name of the secret to store FIDES__SECURITY environment variables
 {{- end }}
 
 {{/*
+Create the name of the config map to store the fides.toml file.
+*/}}
+{{- define "fides.tomlConfigMapName" -}}
+{{ printf "fides-toml-%s" ( include "fides.fullname" . ) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
 The set of environment variables for Fides and workers
 */}}
 {{- define "fides.env" -}}
+{{- $namespace := .Release.Namespace }}
 {{- with .Values.fides.configuration }}
 {{- .additionalEnvVars | toYaml }}
 {{- $_ := required "A value for .Values.fides.configuration.dbSecretName is required." .dbSecretName }}
 {{- $_ := required "A value for .Values.fides.configuration.redisSecretName is required." .redisSecretName }}
+{{- $dbConfig := lookup "v1" "ConfigMap" $namespace .dbSecretName }}
+{{- $redisConfig := lookup "v1" "ConfigMap" $namespace .redisSecretName }}
 - name: FIDES__DATABASE__SERVER
   valueFrom:
     secretKeyRef:
       name: {{ .dbSecretName }}
       key: DB_HOST
+{{- if hasKey $dbConfig "DB_PORT"}}
 - name: FIDES__DATABASE__PORT
   valueFrom:
     secretKeyRef:
       name: {{ .dbSecretName }}
       key: DB_PORT
-- name: FIDES__DATABASE__USERNAME
+{{- end }}
+- name: FIDES__DATABASE__USER
   valueFrom:
     secretKeyRef:
       name: {{ .dbSecretName }}
@@ -141,16 +153,23 @@ The set of environment variables for Fides and workers
     secretKeyRef:
       name: {{ .dbSecretName }}
       key: DB_PASSWORD
+- name: FIDES__DATABASE__DB
+  valueFrom:
+    secretKeyRef:
+      name: {{ .dbSecretName }}
+      key: DB_DATABASE
 - name: FIDES__REDIS__HOST
   valueFrom:
     secretKeyRef:
       name: {{ .redisSecretName }}
       key: REDIS_HOST
+{{- if hasKey $redisConfig "REDIS_PORT" }}
 - name: FIDES__REDIS__PORT
   valueFrom:
     secretKeyRef:
       name: {{ .redisSecretName }}
       key: REDIS_PORT
+{{- end }}
 - name: FIDES__REDIS__PASSWORD
   valueFrom:
     secretKeyRef:
