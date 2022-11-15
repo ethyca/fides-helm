@@ -19,7 +19,7 @@ fides:
     additionalEnvVars:
       - name: FIDES__LOG_PII 
         value: "false"
-      - name: FIDES__LOGGING__LEVEL #Accepted Values include: TRACE, DEBUG, INFO, WARNING, ERROR, and CRITICAL.
+      - name: FIDES__LOGGING__LEVEL #Accepted Values include: DEBUG, INFO, WARNING, ERROR, and CRITICAL.
         value: "INFO"
       - name: FIDES__EXECUTION__SUBJECT_IDENTITY_VERIFICATION_REQUIRED
         value: "false"
