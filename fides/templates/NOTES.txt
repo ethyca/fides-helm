@@ -1,1 +1,12 @@
 ■ Fides
+{{ if .Values.ingress.enabled }}
+Fides Admin UI: https://{{.Values.ingress.hosts.fides}}
+{{- if .Values.privacyCenter.enabled }}
+Privacy Center: https://{{.Values.ingress.hosts.privacyCenter}}
+{{- end }}
+{{- end }}
+{{ if .Release.IsInstall }}
+For more information, check out the following resources: 
+  - Configuration reference: https://ethyca.github.io/fides/installation/configuration/ 
+  - Slack community: https://fidescommunity.slack.com
+{{- end }}
