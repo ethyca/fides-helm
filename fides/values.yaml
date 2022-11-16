@@ -19,14 +19,18 @@ fides:
     additionalEnvVars:
       - name: FIDES__LOG_PII 
         value: "false"
-      - name: FIDES__LOGGING__LEVEL #Accepted Values include: DEBUG, INFO, WARNING, ERROR, and CRITICAL.
-        value: "INFO"
+      - name: FIDES__LOGGING__LEVEL # Accepted values include: DEBUG, INFO, WARNING, ERROR, and CRITICAL.
+        value: "DEBUG"
       - name: FIDES__EXECUTION__SUBJECT_IDENTITY_VERIFICATION_REQUIRED
         value: "false"
       - name: FIDES__EXECUTION__REQUIRE_MANUAL_REQUEST_APPROVAL
         value: "true"
       - name: FIDES__USER__ANALYTICS_OPT_OUT
         value: "true"
+      - name: FIDES__REDIS__SSL
+        value: "true"
+      - name: FIDES__REDIS__SSL_CERT_REQS # Accepted values include: none, optional and require.
+        value: "none"
       # Additional environment variables may be declared here.
   fullnameOverride: ""
   service:
