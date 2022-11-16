@@ -10,12 +10,9 @@ data:
     [redis]
     enabled = true
     db_index = 0
-
+    
     [security]
-    cors_origins = [ 
-      {{ printf "https://%s" .Values.ingress.hosts.privacyCenter | quote}}, 
-      {{ printf "https://%s" .Values.ingress.hosts.fides | quote }}
-    ]
+    cors_origins = [{{ printf "https://%s" .Values.ingress.hosts.privacyCenter | quote }}, {{ printf "https://%s" .Values.ingress.hosts.fides | quote }}]
 
     [execution]
 
