@@ -110,7 +110,7 @@ Create the name of the service account to use
 Create the name of the secret to store FIDES__SECURITY environment variables
 */}}
 {{- define "fides.fidesSecuritySecretName" -}}
-{{ printf "fides-security-%s" ( include "fides.fullname" . ) | trunc 63 | trimSuffix "-" }}
+{{ default (printf "fides-security-%s" ( include "fides.fullname" . ) | trunc 63 | trimSuffix "-") .Values.fides.configuration.fidesSecuritySecretName }}
 {{- end }}
 
 {{/*
