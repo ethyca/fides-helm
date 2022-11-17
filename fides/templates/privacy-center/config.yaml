@@ -7,5 +7,5 @@ data:
 {{- .Files.Get (default "config/privacyCenterConfig.css" .Values.privacyCenter.configuration.configCSSPath) | nindent 4 }}
   config.json: |
 {{- $config := .Files.Get (default "config/privacyCenterConfig.json" .Values.privacyCenter.configuration.configJsonPath) | fromJson }}
-{{- $_ := set $config "server_url_production" ( printf "https://%s/api/v1" .Values.ingress.hosts.fides | quote ) }}
+{{- $_ := set $config "server_url_production" ( printf "https://%s/api/v1" .Values.ingress.hosts.fides ) }}
 {{- $config  | toJson | toString | nindent 4 }}

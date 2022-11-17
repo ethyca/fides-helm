@@ -30,11 +30,14 @@
   ],
   "includeConsent": true,
   "consent": {
+    "title": "Manage your consent",
+    "description": "Manage your consent preferences, including the option to select 'Do Not Sell My Personal Information'.",
     "cookieName": "fides_consent",
+    "icon_path": "/consent.svg",
     "consentOptions": [
       {
         "fidesDataUseKey": "third_party_sharing",
-        "name": "Do not sell my personal information",
+        "name": "Data Sales or Sharing",
         "description": "We use your personal information to tailor and deliver ads to you on your devices. You may opt out of this use of your data.",
         "default": true,
         "highlight": true,

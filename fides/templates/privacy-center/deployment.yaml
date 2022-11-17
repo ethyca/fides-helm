@@ -10,6 +10,11 @@ spec:
   selector:
     matchLabels:
       {{- include "fides.privacyCenter.selectorLabels" . | nindent 6 }}
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -40,10 +45,12 @@ spec:
             httpGet:
               path: /
               port: http
-          readinessProbe:
+          startupProbe:
             httpGet:
               path: /
               port: http
+            failureThreshold: 12
+            periodSeconds: 5
           volumeMounts:
           - name: {{ $volume }}
             mountPath: /app/config
