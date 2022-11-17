@@ -40,6 +40,8 @@ spec:
           env:
             - name: FIDES__CONFIG_PATH
               value: {{ printf "%s/fides.toml" $configPath }}
+            - name: FIDES__EXECUTION__CELERY_CONFIG_PATH
+              value: {{ printf "%s/celery.toml" $configPath }}
             {{- include "fides.env" . | nindent 12 }}
           envFrom:
             - secretRef: 

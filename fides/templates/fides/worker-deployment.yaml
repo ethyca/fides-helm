@@ -1,4 +1,6 @@
 {{- if .Values.fides.workers.enabled }}
+{{- $volume := "config" }}
+{{- $configPath := "/etc/fides/config" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -39,6 +41,10 @@ spec:
           command: ["fides"]
           args: ["worker"]
           env:
+            - name: FIDES__CONFIG_PATH
+              value: {{ printf "%s/fides.toml" $configPath }}
+            - name: FIDES__EXECUTION__CELERY_CONFIG_PATH
+              value: {{ printf "%s/celery.toml" $configPath }}
             {{- include "fides.env" . | nindent 12 }}
           envFrom:
             - secretRef: 
@@ -51,8 +57,15 @@ spec:
             httpGet:
               path: /health
               port: http
+          volumeMounts:
+          - name: {{ $volume }}
+            mountPath: {{ $configPath }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: {{ $volume }}
+          configMap:
+            name: {{ include "fides.tomlConfigMapName" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
