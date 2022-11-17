@@ -52,6 +52,13 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+The Docker tag from which to pull the image.
+*/}}
+{{- define "fides.dockerTag" -}}
+{{ .Values.fides.image.tag | default .Chart.AppVersion }}
+{{- end }}
+
+{{/*
 Common labels
 */}}
 {{- define "fides.labels" -}}

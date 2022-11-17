@@ -34,7 +34,7 @@ spec:
         - name: fides
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.fides.image.repository }}:{{ .Values.fides.image.tag | default .Chart.AppVersion }}"
+          image: {{ printf "%s:%s" .Values.fides.image.repository ( include "fides.dockerTag" .)}}
           imagePullPolicy: {{ .Values.fides.image.pullPolicy }}
           command: ["fides"]
           args: ["worker"]

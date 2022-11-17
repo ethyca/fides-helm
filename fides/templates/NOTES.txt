@@ -1,4 +1,5 @@
 ■ Fides
+Version: {{ include "fides.dockerTag" . }}
 {{ if .Values.ingress.enabled }}
 Fides Admin UI: https://{{.Values.ingress.hosts.fides}}
 {{- if .Values.privacyCenter.enabled }}
