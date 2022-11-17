@@ -1,0 +1,20 @@
+[cli]
+server_protocol = "http"
+server_host = "localhost"
+server_port = "8080"
+analytics_id = "502a311ed871a3db344d9fd0013c66b5"
+
+[database]
+server = "default-db"
+user = "defaultuser"
+password = "defaultpassword"
+db = "default_db"
+port = "5432"
+
+[logging]
+destination = ""
+level = "INFO"
+serialization = ""
+
+[user]
+analytics_opt_out = false
