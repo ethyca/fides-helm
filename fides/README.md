@@ -19,6 +19,18 @@ Before deploying the Helm chart, you will need the following:
   * `REDIS_PORT` - \[Optional - Defaults to `6379`\]
   * `REDIS_PASSWORD`
 
+## Configuration
+
+See [values.yaml](./values.yaml) for the configuration options.
+
+You'll likely want to override some of the values set in the `values.yaml` file. To do so, create a local version of the file with your configuration.
+
+```sh
+cp values.yaml values.local.yaml
+```
+
+Most of the Fides configuration is handled natively within the chart; however, you can pass additional environment variables to Fides in `fides.configuration.additionalEnvVars`. See the [Fides configuration guide](https://ethyca.github.io/fides/installation/configuration/) for all possible values.
+
 ## Chart installation
 
 To install this chart, you can clone this repository and run the following command:
