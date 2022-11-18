@@ -40,4 +40,5 @@ helm install fides . --values values.local.yaml
 
 ## Additional information
 
-* Not familiar with Helm? Take a look at [Helm's quick start guide](https://helm.sh/docs/intro/quickstart/).
+* Need some additional help with Fides? Try out our [Sample Fides Project](https://ethyca.github.io/fides/getting-started/sample_project/)!
+* Not familiar with Helm? Take a look at [Helm's quick start guide](https://helm.sh/docs/intro/quickstart/)!
