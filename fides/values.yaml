@@ -43,9 +43,6 @@ fides:
     # fides.workers.enabled determines whether the deployment will use dedicated Fides workers to process DSRs.
     # This should be enabled in production environments.
     enabled: false
-    minReplicas: 1
-    maxReplicas: 3
-    targetCPUUtilizationPercentage: 80
 
 # privacyCenter is the end-user facing application where data subjects can submit privacy requests.
 privacyCenter:
