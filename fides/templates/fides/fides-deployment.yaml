@@ -54,15 +54,13 @@ spec:
             httpGet:
               path: /
               port: http
-            # Consider extending initialDelaySeconds to 60 for sluggish clusters e.g. kind & minikube
-            initialDelaySeconds: 15
+            initialDelaySeconds: {{ .Values.fides.startupTimeSeconds | default 30 }}
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /health
               port: http
-            # Consider extending initialDelaySeconds to 60 for sluggish clusters e.g. kind & minikube
-            initialDelaySeconds: 10
+            initialDelaySeconds: {{ .Values.fides.startupTimeSeconds | default 30 }}
             periodSeconds: 5
           volumeMounts:
           - name: {{ $volume }}
