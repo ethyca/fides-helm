@@ -6,12 +6,21 @@ metadata:
     {{- include "fides.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
   containers:
     - name: fides
-      image: busybox
-      command: ['wget']
-      args: ['{{ include "fides.fullname" . }}:{{ .Values.fides.service.port }}']
+      image: {{ printf "%s:%s" .Values.fides.image.repository ( include "fides.dockerTag" .)}}
+      imagePullPolicy: {{ .Values.fides.image.pullPolicy }}
+      env:
+        - name: FIDES__CLI__SERVER_HOST
+          value: {{ include "fides.fullname" . }}
+        - name: FIDES__CLI__SERVER_PORT
+          value: {{ .Values.fides.service.port | quote }}
+        - name: FIDES__USER__ANALYTICS_OPT_OUT
+          value: "true"
+      command: ['fides']
+      args: ['status']
     - name: privacy-center
       image: busybox
       command: ['wget']
