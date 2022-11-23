@@ -9,5 +9,5 @@ Privacy Center: https://{{.Values.ingress.hosts.privacyCenter}}
 {{ if .Release.IsInstall }}
 For more information, check out the following resources: 
   - Configuration reference: https://ethyca.github.io/fides/installation/configuration/ 
-  - Slack community: https://fidescommunity.slack.com
+  - Slack community: https://fid.es/slack
 {{- end }}
