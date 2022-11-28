@@ -1,0 +1,19 @@
+name: ci
+on:
+  pull_request:
+    paths-ignore:
+      - "**.md"
+jobs:
+  check-helm-formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: azure/setup-helm@v3
+        id: helm-install
+        with:
+          version: 'v3.10.0'
+      - name: Run Helm Lint - Fides
+        working-directory: ./fides/
+        id: helm-lint
+        run: helm lint
