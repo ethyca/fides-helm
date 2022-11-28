@@ -1,0 +1,85 @@
+{{- $volume := "config" }}
+{{- $configPath := "/etc/fides/config" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fides.fullname" . }}
+  labels:
+    {{- include "fides.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "fides.fides.selectorLabels" . | nindent 6 }}
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "fides.fides.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "fides.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: fides
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ printf "%s:%s" .Values.fides.image.repository ( include "fides.dockerTag" .)}}
+          imagePullPolicy: {{ .Values.fides.image.pullPolicy }}
+          env:
+            - name: FIDES__CONFIG_PATH
+              value: {{ printf "%s/fides.toml" $configPath }}
+            - name: FIDES__EXECUTION__CELERY_CONFIG_PATH
+              value: {{ printf "%s/celery.toml" $configPath }}
+            {{- include "fides.env" . | nindent 12 }}
+          envFrom:
+            - secretRef: 
+                name: {{ include "fides.fidesSecuritySecretName" . }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.fides.startupTimeSeconds | default 30 }}
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: {{ .Values.fides.startupTimeSeconds | default 30 }}
+            periodSeconds: 5
+          volumeMounts:
+          - name: {{ $volume }}
+            mountPath: {{ $configPath }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: {{ $volume }}
+          configMap:
+            name: {{ include "fides.tomlConfigMapName" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
