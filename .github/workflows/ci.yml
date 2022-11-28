@@ -14,5 +14,6 @@ jobs:
         with:
           version: 'v3.10.0'
       - name: Run Helm Lint - Fides
+        working-directory: ./fides/
         id: helm-lint
         run: helm lint
