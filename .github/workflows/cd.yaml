@@ -21,8 +21,6 @@ jobs:
         with:
           install_only: true
       - name: Package Charts
-        working-directory: ./fides/
         run: cr package *
       - name: Release Charts
-        working-directory: ./fides/
         run: cr upload --owner ethyca --git-repo fides-helm --skip-existing --token ${{ secrets.GITHUB_TOKEN }}
