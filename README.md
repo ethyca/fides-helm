@@ -2,6 +2,13 @@
 
 This repository contains Helm charts and code examples to deploy [Fides](https://ethyca.github.io/fides).
 
+To use the charts in this repository, first add the chart repository with the following commands: 
+
+```sh
+helm repo add ethyca https://ethyca.github.io/fides-helm/
+helm repo update
+```
+
 ## Helm Charts
 
 * [Fides Helm Chart](./fides/) - Deploy Fides to Kubernetes
