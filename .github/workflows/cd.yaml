@@ -21,6 +21,6 @@ jobs:
         with:
           install_only: true
       - name: Package Charts
-        run: cr package *
+        run: cr package */
       - name: Release Charts
         run: cr upload --owner ethyca --git-repo fides-helm --skip-existing --token ${{ secrets.GITHUB_TOKEN }}
