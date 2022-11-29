@@ -11,16 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
       - uses: azure/setup-helm@v3
         id: helm-install
         with:
           version: 'v3.10.0'
-      - name: Install chart-releaser
-        uses: helm/chart-releaser-action@v1.4.0
-        with:
-          install_only: true
-      - name: Package Charts
-        run: cr package */
-      - name: Release Charts
-        run: cr upload --owner ethyca --git-repo fides-helm --skip-existing --token ${{ secrets.GITHUB_TOKEN }}
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.4.1
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          CR_SKIP_EXISTING: "true"
