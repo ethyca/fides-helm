@@ -5,5 +5,8 @@
 # Local values
 **/*values.local.yaml
 
+# Chart Releaser packages
+.cr-release-packages/
+
 ### Fides ###
 fides.toml
