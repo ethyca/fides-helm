@@ -1,0 +1,55 @@
+name: Create PR for Fides Version Update
+
+on:
+  repository_dispatch:
+    types: [new-fides-release]
+
+jobs:
+  Create-PR:
+    name: Create Fides Update PR
+    permissions:
+      issues: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout-code
+        uses: actions/checkout@v3
+      - name: Get Current Chart Version
+        id: get-chart-version
+        working-directory: ./fides/
+        run: |
+          echo CHART_VERSION_CURRENT=$(yq '.version' Chart.yaml) >> $GITHUB_OUTPUT
+          echo FIDES_VERSION_CURRENT=$(yq '.appVersion' Chart.yaml) >> $GITHUB_OUTPUT
+      - name: Increase Chart Minor Version
+        id: chart-semver
+        uses: "WyriHaximus/github-action-next-semvers@v1"
+        with:
+          version: ${{ steps.get-chart-version.outputs.CHART_VERSION_CURRENT }}
+      - name: Update Fides Version
+        id: update-chart
+        working-directory: ./fides/
+        run: | 
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          yq '.appVersion = ${{ github.event.client_payload.tag }}' Chart.yaml
+          yq '.Version = ${{ steps.chart-semver.outputs.minor }}' Chart.yaml
+          echo BRANCH=version-fides-${{ github.event.client_payload.tag }} >> $GITHUB_OUTPUT
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: "chore: bump appVersion to ${{ github.event.client_payload.tag }}"
+          title: Update Fides Version - ${{ github.event.client_payload.tag }}
+          body: |
+            # Fides Version Upgrade
+
+            * Upgrade Fides version from `${{ steps.get-chart-version.outputs.FIDES_VERSION_CURRENT }}` to `${{ github.event.client_payload.tag }}`
+            * Increment Chart Version from `${{ steps.get-chart-version.outputs.CHART_VERSION_CURRENT }}` to `${{ steps.chart-semver.outputs.minor }}'`
+
+            ## Pre-merge Checklist
+
+            - [ ] - Confirm that ${{ github.event.client_payload.tag }} is a valid version of Fides and is published to [Docker Hub](https://hub.docker.com/r/ethyca/fides/tags?page=1&name=${{ github.event.client_payload.tag }})
+            - [ ] - Confirm that ${{ steps.chart-semver.outputs.minor }} is the appropriate SemVer value for the new version of the chart
+            - [ ] - Test new chart for regressions - `git fetch origin ${{ steps.update-chart.outputs.BRANCH }} && git switch -c ${{ steps.update-chart.outputs.BRANCH }} origin/${{ steps.update-chart.outputs.BRANCH }}`
+
+          branch: ${{ steps.update-chart.outputs.BRANCH }}
+          base: main
