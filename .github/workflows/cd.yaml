@@ -11,18 +11,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
+        id: checkout-code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Configure Git
+        id: configure-git
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-      - uses: azure/setup-helm@v3
+      - name: Install Helm
         id: helm-install
+        uses: azure/setup-helm@v3
         with:
           version: 'v3.10.0'
       - name: Run chart-releaser
+        id: release-chart
         uses: helm/chart-releaser-action@v1.4.1
         with:
           charts_dir: '.'
