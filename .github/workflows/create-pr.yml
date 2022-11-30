@@ -8,7 +8,8 @@ jobs:
   Create-PR:
     name: Create Fides Update PR
     permissions:
-      issues: write
+      contents: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
