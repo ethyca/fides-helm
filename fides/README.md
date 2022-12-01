@@ -31,8 +31,7 @@ Most of the Fides configuration is handled natively within the chart; however, y
 
 To download the chart, run the following commands: 
 ```sh
-helm repo add ethyca https://ethyca.github.io/fides-helm/
-helm repo update
+helm repo add ethyca https://helm.ethyca.com
 helm pull ethyca/fides
 ```
 
