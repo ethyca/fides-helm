@@ -1,0 +1,27 @@
+apiVersion: v1
+entries:
+  fides:
+  - apiVersion: v2
+    appVersion: 2.1.0
+    created: "2022-12-01T18:26:18.188416393Z"
+    description: Fides is an open-source privacy engineering platform for managing
+      the fulfillment of data privacy requests in your runtime environment, and the
+      enforcement of privacy regulations in your code.
+    digest: 9ed5b794c75c4fd41c10775f09c92d9fb6273afe97038114f6b6beabc1d2d049
+    home: https://fid.es
+    icon: https://raw.githubusercontent.com/ethyca/fides/main/docs/fides/docs/img/fides-logo.svg
+    keywords:
+    - fides
+    - fidesctl
+    - fides
+    - privacy
+    - gdpr
+    - ccpa
+    name: fides
+    sources:
+    - https://github.com/ethyca/fides
+    type: application
+    urls:
+    - https://github.com/ethyca/fides-helm/releases/download/fides-0.1.1/fides-0.1.1.tgz
+    version: 0.1.1
+generated: "2022-12-01T18:26:18.188422493Z"
