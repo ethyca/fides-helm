@@ -1,8 +1,0 @@
-helm/fides:
-  - "fides/**/*"
-
-documentation:
-  - "**/*.md"
-
-ci/cd:
-  - ".github/**/*"
