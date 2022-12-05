@@ -51,6 +51,6 @@ jobs:
             - [ ] - Confirm that ${{ github.event.client_payload.tag }} is a valid version of Fides and is published to [Docker Hub](https://hub.docker.com/r/ethyca/fides/tags?page=1&name=${{ github.event.client_payload.tag }})
             - [ ] - Confirm that ${{ steps.chart-semver.outputs.minor }} is the appropriate SemVer value for the new version of the chart
             - [ ] - Test new chart for regressions - `git fetch origin ${{ steps.update-chart.outputs.BRANCH }} && git switch -c ${{ steps.update-chart.outputs.BRANCH }} origin/${{ steps.update-chart.outputs.BRANCH }}`
-
+          labels: chore
           branch: ${{ steps.update-chart.outputs.BRANCH }}
           base: main
