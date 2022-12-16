@@ -1,9 +1,9 @@
 ■ Fides
 Version: {{ include "fides.dockerTag" . }}
 {{ if .Values.ingress.enabled }}
-Fides Admin UI: https://{{.Values.ingress.hosts.fides}}
+Fides Admin UI: https://{{.Values.fides.publicHostname}}
 {{- if .Values.privacyCenter.enabled }}
-Privacy Center: https://{{.Values.ingress.hosts.privacyCenter}}
+Privacy Center: https://{{.Values.privacyCenter.publicHostname}}
 {{- end }}
 {{- end }}
 {{ if .Release.IsInstall }}

@@ -13,7 +13,7 @@ data:
     
     [security]
     {{- if .Values.ingress.enabled }}
-    cors_origins = [{{ printf "https://%s" .Values.ingress.hosts.privacyCenter | quote }}, {{ printf "https://%s" .Values.ingress.hosts.fides | quote }}]
+    cors_origins = [{{ printf "https://%s" .Values.privacyCenter.publicHostname | quote }}, {{ printf "https://%s" .Values.fides.publicHostname | quote }}]
     {{- end }}
 
     [execution]

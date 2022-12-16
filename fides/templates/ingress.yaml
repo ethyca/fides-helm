@@ -35,7 +35,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: {{ .Values.ingress.hosts.fides | quote }}
+    - host: {{ .Values.fides.publicHostname | quote }}
       http:
           paths:
           - path: /
@@ -50,7 +50,7 @@ spec:
               serviceName: {{ include "fides.fullname" . }}
               servicePort: {{ .Values.fides.service.port }}
               {{- end }}
-    - host: {{ .Values.ingress.hosts.privacyCenter | quote }}
+    - host: {{ .Values.privacyCenter.publicHostname | quote }}
       http:
           paths:
           - path: /
