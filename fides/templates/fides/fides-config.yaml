@@ -12,9 +12,7 @@ data:
     db_index = 0
     
     [security]
-    {{- if .Values.ingress.enabled }}
-    cors_origins = [{{ printf "https://%s" .Values.privacyCenter.publicHostname | quote }}, {{ printf "https://%s" .Values.fides.publicHostname | quote }}]
-    {{- end }}
+    cors_origins = {{ include "fides.corsOrigins" . | trim }}
 
     [execution]
 

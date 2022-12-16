@@ -35,6 +35,8 @@ fides:
     # fides.configuration.fidesSecuritySecretName is an optional parameter that respresents the name of a Kubernetes secret containing sensitive Fides configuration elements. This secret must have the following keys: 
     # FIDES__SECURITY__APP_ENCRYPTION_KEY, FIDES__SECURITY__OAUTH_ROOT_CLIENT_ID, FIDES__SECURITY__OAUTH_ROOT_CLIENT_SECRET, FIDES__SECURITY__DRP_JWT_SECRET
     fidesSecuritySecretName: ""
+    # fides.configuration.additionalCORSOrigins is an optional parameter to configure allowed CORS origins in addition to the Fides and Privacy Center URLs.
+    additionalCORSOrigins: []
   # fides.publicHostname is used to set the allowed CORS origins for Fides, e.g. fides.example.com
   publicHostname: ""
   fullnameOverride: ""
