@@ -128,13 +128,14 @@ Create the name of the config map to store the fides.toml file.
 {{- end }}
 
 {{/*
-List of CORS origins
+List of CORS origins, concatenated, deduplicated, and formatted.
 */}}
 {{- define "fides.corsOrigins" -}}
 {{ $cors := list (printf "https://%s" .Values.privacyCenter.publicHostname | quote ) (printf "https://%s" .Values.fides.publicHostname | quote) }}
-{{- range .Values.fides.configuration.additionalCORSOrigins }}
+{{- range (.Values.fides.configuration.additionalCORSOrigins | compact) }}
   {{- $cors = . | quote | append $cors }}
 {{- end }}
+{{ $cors = $cors | uniq }}
 {{ printf "[%s]" (join "," $cors) }}
 {{- end }}
 
