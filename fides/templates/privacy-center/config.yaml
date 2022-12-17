@@ -8,5 +8,5 @@ data:
   # For config.json, parse the base configuration and replace the server URL with the actual Fides URL.
   config.json: |
 {{- $config := .Files.Get (default "config/privacyCenterConfig.json" .Values.privacyCenter.configuration.configJsonPath) | fromJson }}
-{{- $_ := set $config "server_url_production" ( printf "https://%s/api/v1" .Values.ingress.hosts.fides ) }}
+{{- $_ := set $config "server_url_production" ( printf "https://%s/api/v1" .Values.fides.publicHostname ) }}
 {{- $config  | toJson | toString | nindent 4 }}

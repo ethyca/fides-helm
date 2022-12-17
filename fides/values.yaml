@@ -35,6 +35,10 @@ fides:
     # fides.configuration.fidesSecuritySecretName is an optional parameter that respresents the name of a Kubernetes secret containing sensitive Fides configuration elements. This secret must have the following keys: 
     # FIDES__SECURITY__APP_ENCRYPTION_KEY, FIDES__SECURITY__OAUTH_ROOT_CLIENT_ID, FIDES__SECURITY__OAUTH_ROOT_CLIENT_SECRET, FIDES__SECURITY__DRP_JWT_SECRET
     fidesSecuritySecretName: ""
+    # fides.configuration.additionalCORSOrigins is an optional parameter to configure allowed CORS origins in addition to the Fides and Privacy Center URLs.
+    additionalCORSOrigins: []
+  # fides.publicHostname is used to set the allowed CORS origins for Fides, e.g. fides.example.com
+  publicHostname: ""
   fullnameOverride: ""
   service:
     type: NodePort
@@ -63,6 +67,8 @@ privacyCenter:
     # privacyCenter.configuration.configCSSPath specifies the location of the config.css file to override the default styles.
     configCSSPath: config/privacyCenterConfig.css
   nameOverride: ""
+  # privacyCenter.publicHostname is used to set the allowed CORS origins for Fides, e.g. privacy.example.com
+  publicHostname: ""
   fullnameOverride: ""
   service:
     type: NodePort
@@ -99,9 +105,6 @@ ingress:
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  hosts:
-    fides: "" # fides.example.com
-    privacyCenter: "" # privacy.example.com
   tls: []
   #  - secretName: fides-tls
   #    hosts:
