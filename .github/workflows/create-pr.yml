@@ -43,7 +43,7 @@ jobs:
           body: |
             # Fides Version Upgrade
 
-            * Upgrade Fides version from `${{ steps.get-chart-version.outputs.FIDES_VERSION_CURRENT }}` to `${{ github.event.client_payload.tag }}`
+            * Upgrade Fides version from `${{ steps.get-chart-version.outputs.FIDES_VERSION_CURRENT }}` to [`${{ github.event.client_payload.tag }}`](https://github.com/ethyca/fides/releases/tag/${{ github.event.client_payload.tag }})
             * Increment Chart Version from `${{ steps.get-chart-version.outputs.CHART_VERSION_CURRENT }}` to `${{ steps.chart-semver.outputs.minor }}'`
 
             ## Pre-merge Checklist
