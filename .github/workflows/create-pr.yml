@@ -32,8 +32,8 @@ jobs:
         run: | 
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          yq '.appVersion = "${{ github.event.client_payload.tag }}"' Chart.yaml
-          yq '.version = "${{ steps.chart-semver.outputs.minor }}"' Chart.yaml
+          yq '.appVersion = "${{ github.event.client_payload.tag }}"' Chart.yaml --inplace
+          yq '.version = "${{ steps.chart-semver.outputs.minor }}"' Chart.yaml --inplace
           echo BRANCH=version-fides-${{ github.event.client_payload.tag }} >> $GITHUB_OUTPUT
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
