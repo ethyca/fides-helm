@@ -10,4 +10,5 @@ Closes ###
 
 * [ ] All CI Pipelines Succeeded
 * [ ] Documentation Updated
+* [ ] Increment Applicable Chart Versions
 * [ ] Relevant Follow-Up Issues Created
