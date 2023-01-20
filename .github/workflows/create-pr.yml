@@ -21,6 +21,7 @@ jobs:
         run: |
           echo CHART_VERSION_CURRENT=$(yq '.version' Chart.yaml) >> $GITHUB_OUTPUT
           echo FIDES_VERSION_CURRENT=$(yq '.appVersion' Chart.yaml) >> $GITHUB_OUTPUT
+          echo NEW_VERSION_FOR_CHANGELOG=$(sed 's/\.//g' <<< ${{ github.event.client_payload.tag }}) >> $GITHUB_OUTPUT
       - name: Increase Chart Minor Version
         id: chart-semver
         uses: "WyriHaximus/github-action-next-semvers@v1"
@@ -43,12 +44,13 @@ jobs:
           body: |
             # Fides Version Upgrade
 
-            * Upgrade Fides version from `${{ steps.get-chart-version.outputs.FIDES_VERSION_CURRENT }}` to [`${{ github.event.client_payload.tag }}`](https://github.com/ethyca/fides/releases/tag/${{ github.event.client_payload.tag }})
-            * Increment Chart Version from `${{ steps.get-chart-version.outputs.CHART_VERSION_CURRENT }}` to `${{ steps.chart-semver.outputs.minor }}`
+            * Upgrade Fides version from [`${{ steps.get-chart-version.outputs.FIDES_VERSION_CURRENT }}`](https://github.com/ethyca/fides/releases/tag/${{ steps.get-chart-version.outputs.FIDES_VERSION_CURRENT }}) to [`${{ github.event.client_payload.tag }}`](https://github.com/ethyca/fides/releases/tag/${{ github.event.client_payload.tag }})
+            * Increment Chart version from `${{ steps.get-chart-version.outputs.CHART_VERSION_CURRENT }}` to `${{ steps.chart-semver.outputs.minor }}`
 
             ## Pre-merge Checklist
 
             - [ ] - Confirm that ${{ github.event.client_payload.tag }} is a valid version of Fides and is published to [Docker Hub](https://hub.docker.com/r/ethyca/fides/tags?page=1&name=${{ github.event.client_payload.tag }})
+            - [ ] - Review [Changelog](https://github.com/ethyca/fides/blob/main/CHANGELOG.md#${{ steps.get-chart-version.outputs.NEW_VERSION_FOR_CHANGELOG }})
             - [ ] - Confirm that ${{ steps.chart-semver.outputs.minor }} is the appropriate SemVer value for the new version of the chart
             - [ ] - Test new chart for regressions - `git fetch origin ${{ steps.update-chart.outputs.BRANCH }} && git switch -c ${{ steps.update-chart.outputs.BRANCH }} origin/${{ steps.update-chart.outputs.BRANCH }}`
           labels: chore
