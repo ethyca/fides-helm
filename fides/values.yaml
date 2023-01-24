@@ -77,6 +77,11 @@ privacyCenter:
 nameOverride: ""
 imagePullSecrets: []
 
+# useRollingUpdate helps to minimize upgrade downtime by running deployment upgrades with a RollingUpdate strategy.
+# When useRollingUpdate is set to false, the Recreate strategy is used instead. For production deployments, 
+# useRollingUpdate should be set to true.
+useRollingUpdate: true
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
