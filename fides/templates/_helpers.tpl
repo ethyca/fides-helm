@@ -114,6 +114,18 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
+Control the deployment strategy
+*/}}
+{{- define "fides.deploymentStrategy" -}}
+type: {{ ternary "RollingUpdate" "Recreate" .Values.useRollingUpdate}}
+{{- if .Values.useRollingUpdate }}
+rollingUpdate:
+  maxSurge: 1
+  maxUnavailable: 0
+{{- end }}
+{{- end }}
+
+{{/*
 Create the name of the secret to store FIDES__SECURITY environment variables
 */}}
 {{- define "fides.fidesSecuritySecretName" -}}
