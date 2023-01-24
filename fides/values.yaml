@@ -17,10 +17,10 @@ fides:
     # fides.configure.additionalEnvVar adds arbitrary environment variables to the configuration, in addition to those set
     # by the Helm chart. See https://ethyca.github.io/fides/installation/configuration/ for all possible values.
     additionalEnvVars:
-      - name: FIDES__LOG_PII 
+      - name: FIDES__LOGGING__LOG_PII 
         value: "false"
       - name: FIDES__LOGGING__LEVEL # Accepted values include: DEBUG, INFO, WARNING, ERROR, and CRITICAL.
-        value: "DEBUG"
+        value: "INFO"
       - name: FIDES__EXECUTION__SUBJECT_IDENTITY_VERIFICATION_REQUIRED
         value: "false"
       - name: FIDES__EXECUTION__REQUIRE_MANUAL_REQUEST_APPROVAL
