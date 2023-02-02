@@ -78,7 +78,7 @@ privacyCenter:
 
 postgresql:
   # postgresql.deployPostgres configures whether to install and configure the Bitnami Postgresql Helm chart
-  deployPostgres: true
+  deployPostgres: false
 
 redis:
   # redis.deployRedis configures whether to install and configure the Bitnami Redis Helm chart
