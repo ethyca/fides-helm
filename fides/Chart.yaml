@@ -16,6 +16,10 @@ home: https://fid.es
 sources:
   - https://github.com/ethyca/fides
 dependencies:
+  - name: postgresql
+    version: "12.1.14"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: postgresql.deployPostgres
   - name: redis
     version: "17.6.0"
     repository: "https://charts.bitnami.com/bitnami"

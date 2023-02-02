@@ -76,6 +76,10 @@ privacyCenter:
     type: NodePort
     port: 3000
 
+postgresql:
+  # postgresql.deployPostgres configures whether to install and configure the Bitnami Postgresql Helm chart
+  deployPostgres: true
+
 redis:
   # redis.deployRedis configures whether to install and configure the Bitnami Redis Helm chart
   deployRedis: false

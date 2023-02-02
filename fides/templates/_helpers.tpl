@@ -158,16 +158,20 @@ The set of environment variables for Fides and workers
 {{- $namespace := .Release.Namespace }}
 {{- $releaseName := .Release.Name }}
 {{- $redisDeployment := .Values.redis }}
+{{- $pgDeployment := .Values.postgresql }}
 {{- with .Values.fides.configuration }}
 {{- .additionalEnvVars | toYaml }}
-{{- $_ := required "A value for .Values.fides.configuration.dbSecretName is required." .dbSecretName }}
 {{- $dbConfig := lookup "v1" "Secret" $namespace .dbSecretName }}
 {{- $redisConfig := lookup "v1" "Secret" $namespace .redisSecretName }}
 - name: FIDES__DATABASE__SERVER
+{{- if $pgDeployment.deployPostgres }}
+  value: {{ printf "%s-postgresql" $releaseName }}
+{{- else }}
   valueFrom:
     secretKeyRef:
       name: {{ .dbSecretName }}
       key: DB_HOST
+{{- end }}
 {{- if hasKey $dbConfig "DB_PORT"}}
 - name: FIDES__DATABASE__PORT
   valueFrom:
@@ -176,20 +180,33 @@ The set of environment variables for Fides and workers
       key: DB_PORT
 {{- end }}
 - name: FIDES__DATABASE__USER
+{{- if $pgDeployment.deployPostgres }}
+  value: postgres
+{{- else }}
   valueFrom:
     secretKeyRef:
       name: {{ .dbSecretName }}
       key: DB_USERNAME
+{{- end }}
 - name: FIDES__DATABASE__PASSWORD
   valueFrom:
     secretKeyRef:
+    {{- if $pgDeployment.deployPostgres }}
+      name: {{ printf "%s-postgresql" $releaseName }}
+      key: postgres-password
+    {{- else }}
       name: {{ .dbSecretName }}
       key: DB_PASSWORD
+    {{- end }}
 - name: FIDES__DATABASE__DB
+{{- if $pgDeployment.deployPostgres }}
+  value: postgres
+{{- else }}
   valueFrom:
     secretKeyRef:
       name: {{ .dbSecretName }}
       key: DB_DATABASE
+{{- end }}
 - name: FIDES__REDIS__HOST
 {{- if $redisDeployment.deployRedis }}
   value: {{ printf "%s-redis-master" $releaseName }}
