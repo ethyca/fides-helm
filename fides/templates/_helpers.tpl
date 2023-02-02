@@ -156,12 +156,13 @@ The set of environment variables for Fides and workers
 */}}
 {{- define "fides.env" -}}
 {{- $namespace := .Release.Namespace }}
+{{- $releaseName := .Release.Name }}
+{{- $redisDeployment := .Values.redis }}
 {{- with .Values.fides.configuration }}
 {{- .additionalEnvVars | toYaml }}
 {{- $_ := required "A value for .Values.fides.configuration.dbSecretName is required." .dbSecretName }}
-{{- $_ := required "A value for .Values.fides.configuration.redisSecretName is required." .redisSecretName }}
-{{- $dbConfig := lookup "v1" "ConfigMap" $namespace .dbSecretName }}
-{{- $redisConfig := lookup "v1" "ConfigMap" $namespace .redisSecretName }}
+{{- $dbConfig := lookup "v1" "Secret" $namespace .dbSecretName }}
+{{- $redisConfig := lookup "v1" "Secret" $namespace .redisSecretName }}
 - name: FIDES__DATABASE__SERVER
   valueFrom:
     secretKeyRef:
@@ -190,10 +191,14 @@ The set of environment variables for Fides and workers
       name: {{ .dbSecretName }}
       key: DB_DATABASE
 - name: FIDES__REDIS__HOST
+{{- if $redisDeployment.deployRedis }}
+  value: {{ printf "%s-redis-master" $releaseName }}
+{{- else }}
   valueFrom:
     secretKeyRef:
       name: {{ .redisSecretName }}
       key: REDIS_HOST
+{{- end }}
 {{- if hasKey $redisConfig "REDIS_PORT" }}
 - name: FIDES__REDIS__PORT
   valueFrom:
@@ -204,7 +209,12 @@ The set of environment variables for Fides and workers
 - name: FIDES__REDIS__PASSWORD
   valueFrom:
     secretKeyRef:
+{{- if $redisDeployment.deployRedis }}
+      name: {{ printf "%s-redis" $releaseName }}
+      key: redis-password
+{{- else }}
       name: {{ .redisSecretName }}
       key: REDIS_PASSWORD
+{{- end }}
 {{- end }}
 {{- end }}
