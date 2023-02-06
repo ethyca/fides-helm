@@ -49,9 +49,9 @@ fides:
   # For local kubernetes clusters, such as minikube & kind, you may need to increase this value to 60 seconds.
   startupTimeSeconds: 30
   workers:
-    # fides.workers.enabled determines whether the deployment will use dedicated Fides workers to process DSRs.
-    # This should be enabled in production environments.
-    enabled: false
+    # fides.workers.count determines how many workers the deployment will use to process DSRs.
+    # To disable workers, set count to 0. This should be set to at least 1 in production environments.
+    count: 0
 
 # privacyCenter is the end-user facing application where data subjects can submit privacy requests.
 privacyCenter:
