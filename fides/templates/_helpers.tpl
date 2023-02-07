@@ -140,6 +140,20 @@ Create the name of the config map to store the fides.toml file.
 {{- end }}
 
 {{/*
+Create the name of the config map to store the fides.toml file.
+*/}}
+{{- define "fides.worker.tomlConfigMapName" -}}
+{{ printf "worker-%s" (include "fides.tomlConfigMapName" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Boolean to determine whether workers are enabled.
+*/}}
+{{- define "fides.worker.enabled" -}}
+{{ ge (.Values.fides.workers.count | int) 1 }}
+{{- end }}
+
+{{/*
 List of CORS origins, concatenated, deduplicated, and formatted.
 */}}
 {{- define "fides.corsOrigins" -}}
@@ -158,16 +172,20 @@ The set of environment variables for Fides and workers
 {{- $namespace := .Release.Namespace }}
 {{- $releaseName := .Release.Name }}
 {{- $redisDeployment := .Values.redis }}
+{{- $pgDeployment := .Values.postgresql }}
 {{- with .Values.fides.configuration }}
 {{- .additionalEnvVars | toYaml }}
-{{- $_ := required "A value for .Values.fides.configuration.dbSecretName is required." .dbSecretName }}
 {{- $dbConfig := lookup "v1" "Secret" $namespace .dbSecretName }}
 {{- $redisConfig := lookup "v1" "Secret" $namespace .redisSecretName }}
 - name: FIDES__DATABASE__SERVER
+{{- if $pgDeployment.deployPostgres }}
+  value: {{ printf "%s-postgresql" $releaseName }}
+{{- else }}
   valueFrom:
     secretKeyRef:
       name: {{ .dbSecretName }}
       key: DB_HOST
+{{- end }}
 {{- if hasKey $dbConfig "DB_PORT"}}
 - name: FIDES__DATABASE__PORT
   valueFrom:
@@ -176,20 +194,33 @@ The set of environment variables for Fides and workers
       key: DB_PORT
 {{- end }}
 - name: FIDES__DATABASE__USER
+{{- if $pgDeployment.deployPostgres }}
+  value: postgres
+{{- else }}
   valueFrom:
     secretKeyRef:
       name: {{ .dbSecretName }}
       key: DB_USERNAME
+{{- end }}
 - name: FIDES__DATABASE__PASSWORD
   valueFrom:
     secretKeyRef:
+    {{- if $pgDeployment.deployPostgres }}
+      name: {{ printf "%s-postgresql" $releaseName }}
+      key: postgres-password
+    {{- else }}
       name: {{ .dbSecretName }}
       key: DB_PASSWORD
+    {{- end }}
 - name: FIDES__DATABASE__DB
+{{- if $pgDeployment.deployPostgres }}
+  value: postgres
+{{- else }}
   valueFrom:
     secretKeyRef:
       name: {{ .dbSecretName }}
       key: DB_DATABASE
+{{- end }}
 - name: FIDES__REDIS__HOST
 {{- if $redisDeployment.deployRedis }}
   value: {{ printf "%s-redis-master" $releaseName }}
