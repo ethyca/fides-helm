@@ -46,11 +46,15 @@ spec:
             - secretRef: 
                 name: {{ include "fides.fidesSecuritySecretName" . }}
           livenessProbe:
-            httpGet:
-              path: /health
-              port: http
+            exec:
+              command: [
+                "bash",
+                "-c",
+                "celery --quiet --no-color --app fides.api.ops.tasks inspect ping --destination celery@$HOSTNAME --json"
+              ]
             initialDelaySeconds: {{ .Values.fides.startupTimeSeconds | default 30 }}
-            periodSeconds: 5
+            periodSeconds: 60
+            timeoutSeconds: 10
           volumeMounts:
           - name: {{ $volume }}
             mountPath: {{ $configPath }}
