@@ -21,6 +21,6 @@ dependencies:
     repository: "https://charts.bitnami.com/bitnami"
     condition: postgresql.deployPostgres
   - name: redis
-    version: "17.6.0"
+    version: "17.7.2"
     repository: "https://charts.bitnami.com/bitnami"
     condition: redis.deployRedis
