@@ -1,4 +1,4 @@
-{{- if (include "fides.worker.enabled" .) }}
+{{- if $.worker }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

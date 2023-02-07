@@ -14,7 +14,7 @@ data:
     [celery]
     event_queue_prefix = "fides_worker"
     task_default_queue = "fides"
-    task_always_eager = {{ not ( include "fides.worker.enabled" . ) }}
+    task_always_eager = {{ not $.worker }}
 
     [security]
     cors_origins = {{ include "fides.corsOrigins" . | trim }}

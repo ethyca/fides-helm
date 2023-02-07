@@ -1,4 +1,5 @@
-{{- if (include "fides.worker.enabled" .) }}
+{{- $_ := set $ "worker" ( ge (.Values.fides.workers.count | int) 1) }}
+{{- if $.worker }}
 {{- $volume := "config" }}
 {{- $configPath := "/etc/fides/config" }}
 apiVersion: apps/v1
@@ -12,7 +13,7 @@ spec:
   selector:
     matchLabels:
       {{- include "fides.worker.selectorLabels" . | nindent 6 }}
-  strategy: 
+  strategy:
     {{- include "fides.deploymentStrategy" . | nindent 4 }}
   template:
     metadata:
