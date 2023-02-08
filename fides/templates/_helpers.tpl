@@ -147,13 +147,6 @@ Create the name of the config map to store the fides.toml file.
 {{- end }}
 
 {{/*
-Boolean to determine whether workers are enabled.
-*/}}
-{{- define "fides.worker.enabled" -}}
-{{ ge (.Values.fides.workers.count | int) 1 }}
-{{- end }}
-
-{{/*
 List of CORS origins, concatenated, deduplicated, and formatted.
 */}}
 {{- define "fides.corsOrigins" -}}
