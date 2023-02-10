@@ -12,8 +12,16 @@ jobs:
       - uses: azure/setup-helm@v3
         id: helm-install
         with:
-          version: 'v3.10.0'
-      - name: Run Helm Lint - Fides
+          version: "v3.10.0"
+      - name: Fides - Configure Helm
+        id: helm-configure
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+      - name: Lint Helm - Fides
         working-directory: ./fides/
         id: helm-lint
         run: helm lint
+      - name: Fides - Check Helm Dependencies
+        working-directory: ./fides/
+        id: helm-dependency
+        run: helm dependency build
