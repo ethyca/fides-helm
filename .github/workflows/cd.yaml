@@ -24,7 +24,7 @@ jobs:
         id: helm-install
         uses: azure/setup-helm@v3
         with:
-          version: 'v3.10.0'
+          version: "v3.11.1"
       - name: Configure Helm
         id: helm-configure
         run: |
@@ -33,7 +33,7 @@ jobs:
         id: release-chart
         uses: helm/chart-releaser-action@v1.4.1
         with:
-          charts_dir: '.'
+          charts_dir: "."
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           CR_SKIP_EXISTING: "true"
