@@ -46,6 +46,10 @@ spec:
           envFrom:
             - secretRef: 
                 name: {{ include "fides.fidesSecuritySecretName" . }}
+            {{- if .Values.fides.configuration.additionalEnvVarsSecret }}
+            - secretRef: 
+                name: {{ .Values.fides.configuration.additionalEnvVarsSecret }}
+            {{- end }}
           livenessProbe:
             exec:
               command: [

@@ -1,0 +1,32 @@
+{{- if .Capabilities.APIVersions.Has "s3.services.k8s.aws/v1alpha1" -}}
+{{- with .Values.s3 -}}
+{{- if .createS3Bucket -}}
+apiVersion: s3.services.k8s.aws/v1alpha1
+kind: Bucket
+metadata:
+  name: {{ .bucketName }}
+spec:
+  name: {{ .bucketName | required "bucketName must be provided when createS3Bucket is enabled."}}
+  acl: private
+  createBucketConfiguration:
+    {{- if (ne .region "us-east-1") }}
+    locationConstraint: {{ .region }}
+    {{- end }}
+  lifecycle: 
+    rules:
+      - status: Enabled
+        abortIncompleteMultipartUpload: 
+          daysAfterInitiation: 30
+        expiration: 
+          days: 30
+        filter: {}
+  publicAccessBlock: 
+    blockPublicACLs: true
+    blockPublicPolicy: true
+    ignorePublicACLs: true
+    restrictPublicBuckets: true
+{{- end -}}
+{{- else -}}
+{{- fail "ACK must be installed to manage S3 buckets. For more information, see README.md." -}}
+{{- end -}}
+{{- end -}}
