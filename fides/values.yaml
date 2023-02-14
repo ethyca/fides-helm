@@ -84,6 +84,15 @@ redis:
   # redis.deployRedis configures whether to install and configure the Bitnami Redis Helm chart
   deployRedis: false
 
+s3:
+  # s3.createS3Bucket creates an S3 bucket to be used as a Fides storage destination.
+  # In order to create S3 buckets, the S3 ACK must be installed. For more information see the chart's README.
+  createS3Bucket: false
+  # s3.bucketName represents the name of the bucket to create if s3.createS3Bucket is set to true.
+  bucketName: ""
+  # s3.region sets the location constraint and may be set to any valid AWS region.
+  region: us-east-1
+
 nameOverride: ""
 imagePullSecrets: []
 
