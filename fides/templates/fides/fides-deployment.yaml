@@ -41,6 +41,10 @@ spec:
           envFrom:
             - secretRef: 
                 name: {{ include "fides.fidesSecuritySecretName" . }}
+            {{- if .Values.fides.configuration.additionalEnvVarsSecret }}
+            - secretRef: 
+                name: {{ .Values.fides.configuration.additionalEnvVarsSecret }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8080
