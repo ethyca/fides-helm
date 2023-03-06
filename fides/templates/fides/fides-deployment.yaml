@@ -55,14 +55,14 @@ spec:
               port: http
             initialDelaySeconds: {{ .Values.fides.startupTimeSeconds | default 30 }}
             periodSeconds: 15
-            timeoutSeconds: 5
+            timeoutSeconds: {{ .Values.fides.healthCheckTimeoutSeconds | default 5 }}
           readinessProbe:
             httpGet:
               path: /health
               port: http
             initialDelaySeconds: {{ .Values.fides.startupTimeSeconds | default 30 }}
             periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: {{ .Values.fides.healthCheckTimeoutSeconds | default 5 }}
           volumeMounts:
           - name: {{ $volume }}
             mountPath: {{ $configPath }}
