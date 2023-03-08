@@ -72,6 +72,8 @@ privacyCenter:
     configJsonPath: config/privacyCenterConfig.json
     # privacyCenter.configuration.configCSSPath specifies the location of the config.css file to override the default styles.
     configCSSPath: config/privacyCenterConfig.css
+    # privacyCenter.configuration.configFilesOverride specifies the name of an existing configmap with the keys config.css and config.json containing the customization files.
+    configFilesOverrideConfigMap: ""
   nameOverride: ""
   # privacyCenter.publicHostname is used to set the allowed CORS origins for Fides, e.g. privacy.example.com
   publicHostname: ""

@@ -56,7 +56,7 @@ spec:
       volumes:
         - name: {{ $volume }}
           configMap:
-            name: {{ include "fides.privacyCenter.fullname" . }}
+            name: {{(empty .Values.privacyCenter.configuration.configFilesOverrideConfigMap) | ternary (include "fides.privacyCenter.fullname" .) .Values.privacyCenter.configuration.configFilesOverrideConfigMap }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
