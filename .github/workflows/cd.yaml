@@ -31,7 +31,7 @@ jobs:
           helm repo add bitnami https://charts.bitnami.com/bitnami
       - name: Run chart-releaser
         id: release-chart
-        uses: helm/chart-releaser-action@v1.4.1
+        uses: helm/chart-releaser-action@v1.5.0
         with:
           charts_dir: "."
         env:

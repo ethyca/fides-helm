@@ -1,3 +1,4 @@
+{{- if (empty .Values.privacyCenter.configuration.configFilesOverrideConfigMap) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -10,3 +11,4 @@ data:
 {{- $config := .Files.Get (default "config/privacyCenterConfig.json" .Values.privacyCenter.configuration.configJsonPath) | fromJson }}
 {{- $_ := set $config "server_url_production" ( printf "https://%s/api/v1" .Values.fides.publicHostname ) }}
 {{- $config  | toJson | toString | nindent 4 }}
+{{- end -}}
