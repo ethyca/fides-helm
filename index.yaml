@@ -3,6 +3,38 @@ entries:
   fides:
   - apiVersion: v2
     appVersion: 2.8.1
+    created: "2023-03-08T20:46:56.018651727Z"
+    dependencies:
+    - condition: postgresql.deployPostgres
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.2.2
+    - condition: redis.deployRedis
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.8.2
+    description: Fides is an open-source privacy engineering platform for managing
+      the fulfillment of data privacy requests in your runtime environment, and the
+      enforcement of privacy regulations in your code.
+    digest: c9f3f416bc88f468acff55e91dabb1c5d586a3ced03f255019f7d5981fbcc3c4
+    home: https://fid.es
+    icon: https://raw.githubusercontent.com/ethyca/fides/main/docs/fides/docs/img/fides-logo.svg
+    keywords:
+    - fides
+    - fidesctl
+    - fidesops
+    - privacy
+    - gdpr
+    - ccpa
+    name: fides
+    sources:
+    - https://github.com/ethyca/fides
+    type: application
+    urls:
+    - https://github.com/ethyca/fides-helm/releases/download/fides-0.9.6/fides-0.9.6.tgz
+    version: 0.9.6
+  - apiVersion: v2
+    appVersion: 2.8.1
     created: "2023-03-08T15:53:28.333533197Z"
     dependencies:
     - condition: postgresql.deployPostgres
@@ -585,4 +617,4 @@ entries:
     urls:
     - https://github.com/ethyca/fides-helm/releases/download/fides-0.1.1/fides-0.1.1.tgz
     version: 0.1.1
-generated: "2023-03-08T15:53:28.333841107Z"
+generated: "2023-03-08T20:46:56.018924327Z"
