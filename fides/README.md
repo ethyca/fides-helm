@@ -42,7 +42,7 @@ helm install fides ethyca/fides --values values.local.yaml
 
 ## Manage S3 Bucket (optional)
 
-If you would also like to manage the S3 bucket to be used as a Fides storage destination, you must first install the appropriate AWS Controllers for Kubernetes [ACK](https://aws-controllers-k8s.github.io/community/docs/community/overview/) services. ACK is a way to manage AWS resources from within Kubernetes using Custom Resource Definitions. To get started, follow the (official ACK setup documentation)[https://aws-controllers-k8s.github.io/community/docs/user-docs/install/] for **S3**. 
+If you would also like to manage the S3 bucket to be used as a Fides storage destination, you must first install the appropriate AWS Controllers for Kubernetes [ACK](https://aws-controllers-k8s.github.io/community/docs/community/overview/) services. ACK is a way to manage AWS resources from within Kubernetes using Custom Resource Definitions. To get started, follow the [official ACK setup documentation](https://aws-controllers-k8s.github.io/community/docs/user-docs/install/) for **S3**. 
 
 Additionally, [IAM Roles for Service Accounts](https://aws-controllers-k8s.github.io/community/docs/user-docs/irsa/) must be enabled.
 
