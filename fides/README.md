@@ -1,6 +1,6 @@
 # Fides Helm Chart
 
-This [Helm](https://helm.sh) chart deploys [Fides](https://ethyca.github.io/fides), an open-source privacy engineering platform.
+This [Helm](https://helm.sh) chart deploys [Fides](https://fid.es/docs), an open-source privacy engineering platform.
 
 ## Prerequisites
 Before deploying the Helm chart, you will need the several dependencies, depending on your values.yaml configuration.
@@ -32,7 +32,7 @@ See [values.yaml](./values.yaml) for the configuration options.
 
 You'll likely want to override some of the values set in the `values.yaml` file. To do so, create a local version of the file with your configuration.
 
-Most of the Fides configuration is handled natively within the chart; however, you may pass additional environment variables to Fides in `fides.configuration.additionalEnvVars`. See the [Fides configuration guide](https://ethyca.github.io/fides/installation/configuration/) for all possible values.
+Most of the Fides configuration is handled natively within the chart; however, you may pass additional environment variables to Fides in `fides.configuration.additionalEnvVars`. See the [Fides configuration guide](https://docs.ethyca.com/fides/get_started/configuration) for all possible values.
 
 ## Chart installation
 
@@ -55,5 +55,5 @@ Additionally, [IAM Roles for Service Accounts](https://aws-controllers-k8s.githu
 
 ## Additional information
 
-* Need some additional help with Fides? Try out our [Sample Fides Project](https://ethyca.github.io/fides/getting-started/sample_project/)!
+* Need some additional help with Fides? Try out our [Sample Fides Project](https://docs.ethyca.com/fides/get_started/quickstart)!
 * Not familiar with Helm? Take a look at [Helm's quick start guide](https://helm.sh/docs/intro/quickstart/)!
