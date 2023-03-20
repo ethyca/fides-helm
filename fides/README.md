@@ -3,7 +3,7 @@
 This [Helm](https://helm.sh) chart deploys [Fides](https://fid.es/docs), an open-source privacy engineering platform.
 
 ## Prerequisites
-Before deploying the Helm chart, you will need the several dependencies, depending on your values.yaml configuration.
+Before deploying the Helm chart, you will need the several dependencies, depending on your `values.yaml` configuration.
 
 * [Helm v3](https://helm.sh/docs/intro/install/) installed on your machine
 * A Kubernetes cluster to which Fides will be deployed
