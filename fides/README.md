@@ -25,7 +25,7 @@ See [values.yaml](./values.yaml) for the configuration options.
 
 You'll likely want to override some of the values set in the `values.yaml` file. To do so, create a local version of the file with your configuration.
 
-Most of the Fides configuration is handled natively within the chart; however, you can pass additional environment variables to Fides in `fides.configuration.additionalEnvVars`. See the [Fides configuration guide](https://ethyca.github.io/fides/installation/configuration/) for all possible values.
+Most of the Fides configuration is handled natively within the chart; however, you may pass additional environment variables to Fides in `fides.configuration.additionalEnvVars`. See the [Fides configuration guide](https://ethyca.github.io/fides/installation/configuration/) for all possible values.
 
 ## Chart installation
 
@@ -35,7 +35,7 @@ helm repo add ethyca https://helm.ethyca.com
 helm pull ethyca/fides
 ```
 
-To install this chart, you can clone this repository and run the following command:
+To install this chart, create a local values file to override the defaults and run the following command:
 ```sh
 helm install fides ethyca/fides --values values.local.yaml
 ```
