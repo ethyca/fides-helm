@@ -32,7 +32,7 @@ See [values.yaml](./values.yaml) for the configuration options.
 
 You'll likely want to override some of the values set in the `values.yaml` file. To do so, create a local version of the file with your configuration.
 
-Most of the Fides configuration is handled natively within the chart; however, you may pass additional environment variables to Fides in `fides.configuration.additionalEnvVars`. See the [Fides configuration guide](https://docs.ethyca.com/fides/get_started/configuration) for all possible values.
+Most of the Fides configuration is handled natively within the chart; however, you may pass additional environment variables to Fides by setting `fides.configuration.additionalEnvVars` or `fides.configuration.additionalEnvVarsSecret`. See the [Fides configuration guide](https://docs.ethyca.com/fides/get_started/configuration) for all possible values.
 
 ## Chart installation
 
