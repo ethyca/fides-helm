@@ -10,7 +10,7 @@ fides:
   configuration:
     # fides.configuration.dbSecretName is the name of the Kubernetes secret containing the Postgres connection information
     # This secret should have at least the following keys: DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE. This value
-    # is required.
+    # is required if postgresql.deployPostgres is false.
     dbSecretName: ""
     # fides.configuration.redisSecretName is the name of the Kubernetes secret containing the Redis connection information
     # This secret should have at least the following keys: REDIS_HOST, REDIS_PORT, REDIS_PASSWORD. This value is required if
@@ -34,9 +34,9 @@ fides:
       - name: FIDES__REDIS__SSL_CERT_REQS # Accepted values include: none, optional and require.
         value: "none"
       # Additional environment variables may be declared here.
-    # fides.configuration.additioanlEnvVarsSecret is an optional parameter representing the name of an existing secret containing environment variables to pass into the Fides containers.
+    # fides.configuration.additionalEnvVarsSecret is an optional parameter representing the name of an existing secret containing environment variables to pass into the Fides containers.
     additionalEnvVarsSecret: ""
-    # fides.configuration.fidesSecuritySecretName is an optional parameter that respresents the name of a Kubernetes secret containing sensitive Fides configuration elements. This secret must have the following keys:
+    # fides.configuration.fidesSecuritySecretName is an optional parameter that respresents the name of a Kubernetes secret containing sensitive Fides configuration elements. If set, this secret must have the following keys:
     # FIDES__SECURITY__APP_ENCRYPTION_KEY, FIDES__SECURITY__OAUTH_ROOT_CLIENT_ID, FIDES__SECURITY__OAUTH_ROOT_CLIENT_SECRET, FIDES__SECURITY__DRP_JWT_SECRET
     fidesSecuritySecretName: ""
     # fides.configuration.additionalCORSOrigins is an optional parameter to configure allowed CORS origins in addition to the Fides and Privacy Center URLs.
