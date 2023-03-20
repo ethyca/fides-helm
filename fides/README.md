@@ -3,21 +3,28 @@
 This [Helm](https://helm.sh) chart deploys [Fides](https://ethyca.github.io/fides), an open-source privacy engineering platform.
 
 ## Prerequisites
+Before deploying the Helm chart, you will need the several dependencies, depending on your values.yaml configuration.
 
-Before deploying the Helm chart, you will need the following:
+* [Helm v3](https://helm.sh/docs/intro/install/) installed on your machine
 * A Kubernetes cluster to which Fides will be deployed
-* A PostgreSQL database
-* A Redis cache
-* A Kubernetes secret for the Postgres containing at least the following keys:
-  * `DB_HOST`
-  * `DB_PORT` - \[Optional - Defaults to `5432`\]
-  * `DB_DATABASE`
-  * `DB_USERNAME`
-  * `DB_PASSWORD`
-* A Kubernetes secret for the Redis containing at least the following keys:
-  * `REDIS_HOST`
-  * `REDIS_PORT` - \[Optional - Defaults to `6379`\]
-  * `REDIS_PASSWORD`
+
+### Optional Prerequisites
+* If `postgresql.deployPostgres` is set to `false`
+  * A PostgreSQL database
+  * A Kubernetes secret for the Postgres containing at least the following keys:
+    * `DB_HOST`
+    * `DB_PORT` - \[Optional - Defaults to `5432`\]
+    * `DB_DATABASE`
+    * `DB_USERNAME`
+    * `DB_PASSWORD`
+* If `redis.deployRedis` is set to `false`
+  * A Redis cache
+  * A Kubernetes secret for the Redis containing at least the following keys:
+    * `REDIS_HOST`
+    * `REDIS_PORT` - \[Optional - Defaults to `6379`\]
+    * `REDIS_PASSWORD`
+* If `s3.createS3Bucket` is set to `true`
+  * [AWS Controllers for Kubernetes for S3](https://aws-controllers-k8s.github.io/community/docs/user-docs/install/)
 
 ## Configuration
 
