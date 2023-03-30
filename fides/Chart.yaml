@@ -16,6 +16,10 @@ home: https://fid.es
 sources:
   - https://github.com/ethyca/fides
 dependencies:
+  - name: aws-load-balancer-controller
+    version: "1.4.8"
+    repository: "https://aws.github.io/eks-charts"
+    condition: ingress.installIngressController.awsLoadBalancerController
   - name: postgresql
     version: "12.2.2"
     repository: "https://charts.bitnami.com/bitnami"

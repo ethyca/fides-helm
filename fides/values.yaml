@@ -134,6 +134,10 @@ securityContext:
 ingress:
   enabled: false
   className: ""
+  installIngressController:
+    # installIngressController.awsLoadBalancerController is an option to install the AWS Load Balancer Controller
+    # as part of this chart.
+    awsLoadBalancerController: false
   annotations:
     {}
     # kubernetes.io/ingress.class: nginx
