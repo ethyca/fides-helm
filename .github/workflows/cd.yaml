@@ -77,6 +77,11 @@ jobs:
             .ingress.annotations."alb.ingress.kubernetes.io/listen-ports" |= ([{"HTTP": 80 },{"HTTPS": 443 }] | to_json(0))
           ' values.yaml
         working-directory: ./fides
+      - name: Build Chart Dependencies
+        id: build-chart-deps
+        run: |
+          helm dependency build
+        working-directory: ./fides
       - name: Package Chart
         id: package-chart
         run: |
