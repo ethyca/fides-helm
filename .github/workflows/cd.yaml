@@ -29,6 +29,7 @@ jobs:
         id: helm-configure
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm repo add eks https://aws.github.io/eks-charts
       - name: Run chart-releaser
         id: release-chart
         uses: helm/chart-releaser-action@v1.5.0
@@ -37,3 +38,47 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           CR_SKIP_EXISTING: "true"
+  release-chart-to-aws-marketplace:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout-code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Configure Git
+        id: configure-git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      - name: Install Helm
+        id: helm-install
+        uses: azure/setup-helm@v3
+        with:
+          version: "v3.11.1"
+      - name: Configure Helm
+        id: helm-configure
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm repo add eks https://aws.github.io/eks-charts
+      - name: Modify values.yaml
+        id: modify-chart
+        run: |
+          yq -i e '
+            .postgresql.deployPostgres |= true | 
+            .redis.deployRedis |= true |
+            .ingress.installIngressController.awsLoadBalancerController |= true |
+            .ingress.enabled |= true |
+            .ingress.className |= "alb" |
+            .ingress.annotations."alb.ingress.kubernetes.io/healthcheck-path" |= "/health" |
+            .ingress.annotations."alb.ingress.kubernetes.io/backend-protocol" |= "HTTP" |
+            .ingress.annotations."alb.ingress.kubernetes.io/scheme" |= "internet-facing" |
+            .ingress.annotations."alb.ingress.kubernetes.io/inbound-cidrs" |= "0.0.0.0/0" |
+            .ingress.annotations."alb.ingress.kubernetes.io/listen-ports" |= ([{"HTTP": 80 },{"HTTPS": 443 }] | to_json(0))
+          ' values.yaml
+        working-directory: ./fides
+      - name: Package Chart
+        id: package-chart
+        run: |
+          helm package .
+        working-directory: ./fides
