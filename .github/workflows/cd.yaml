@@ -62,8 +62,18 @@ jobs:
       - name: Modify values.yaml
         id: modify-chart
         run: |
-          yq -i e '.postgresql.deployPostgres |= true' values.yaml
-          yq -i e '.redis.deployRedis |= true' values.yaml
+          yq -i e '
+            .postgresql.deployPostgres |= true | 
+            .redis.deployRedis |= true |
+            .ingress.installIngressController.awsLoadBalancerController |= true |
+            .ingress.enabled |= true |
+            .ingress.className |= "alb" |
+            .ingress.annotations."alb.ingress.kubernetes.io/healthcheck-path" |= "/health" |
+            .ingress.annotations."alb.ingress.kubernetes.io/backend-protocol" |= "HTTP" |
+            .ingress.annotations."alb.ingress.kubernetes.io/scheme" |= "internet-facing" |
+            .ingress.annotations."alb.ingress.kubernetes.io/inbound-cidrs" |= "0.0.0.0/0" |
+            .ingress.annotations."alb.ingress.kubernetes.io/listen-ports" |= ([{"HTTP": 80 },{"HTTPS": 443 }] | to_json(0))
+          ' values.yaml
         working-directory: ./fides
       - name: Package Chart
         id: package-chart
