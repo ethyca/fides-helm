@@ -2,6 +2,42 @@ apiVersion: v1
 entries:
   fides:
   - apiVersion: v2
+    appVersion: 2.11.0
+    created: "2023-04-18T08:32:56.068968191Z"
+    dependencies:
+    - condition: ingress.installIngressController.awsLoadBalancerController
+      name: aws-load-balancer-controller
+      repository: https://aws.github.io/eks-charts
+      version: 1.4.8
+    - condition: postgresql.deployPostgres
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.2.2
+    - condition: redis.deployRedis
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.8.2
+    description: Fides is an open-source privacy engineering platform for managing
+      the fulfillment of data privacy requests in your runtime environment, and the
+      enforcement of privacy regulations in your code.
+    digest: a8ab475269a9c85736b696ed8e286011e6ff7c5cc991039316215a6f6fcc4202
+    home: https://fid.es
+    icon: https://raw.githubusercontent.com/ethyca/fides/main/docs/fides/docs/img/fides-logo.svg
+    keywords:
+    - fides
+    - fidesctl
+    - fidesops
+    - privacy
+    - gdpr
+    - ccpa
+    name: fides
+    sources:
+    - https://github.com/ethyca/fides
+    type: application
+    urls:
+    - https://github.com/ethyca/fides-helm/releases/download/fides-0.10.2/fides-0.10.2.tgz
+    version: 0.10.2
+  - apiVersion: v2
     appVersion: 2.10.0
     created: "2023-04-03T15:27:56.457910987Z"
     dependencies:
@@ -849,4 +885,4 @@ entries:
     urls:
     - https://github.com/ethyca/fides-helm/releases/download/fides-0.1.1/fides-0.1.1.tgz
     version: 0.1.1
-generated: "2023-04-03T15:27:56.458123789Z"
+generated: "2023-04-18T08:32:56.069397787Z"
