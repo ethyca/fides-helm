@@ -1,6 +1,9 @@
 helm/fides:
   - "fides/**/*"
 
+helm/fides-minimal:
+  - "fides-minimal/**/*"
+
 documentation:
   - "**/*.md"
 
