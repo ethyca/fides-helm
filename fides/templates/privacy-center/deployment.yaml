@@ -1,5 +1,6 @@
 {{- if .Values.privacyCenter.enabled }}
 {{- $volume := "config" }}
+{{- $configPath := "/app/config" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -34,6 +35,13 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.privacyCenter.image.repository }}:{{ .Values.privacyCenter.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.privacyCenter.image.pullPolicy }}
+          env:
+            - name: FIDES_PRIVACY_CENTER__FIDES_API_URL
+              value: {{ printf "https://%s/api/v1" .Values.fides.publicHostname }}
+            - name: FIDES_PRIVACY_CENTER__CONFIG_JSON_URL
+              value: {{ printf "file://%s/config.json" $configPath }}
+            - name: FIDES_PRIVACY_CENTER__CONFIG_CSS_URL
+              value: {{ printf "file://%s/config.css" $configPath }}
           ports:
             - name: http
               containerPort: 3000
