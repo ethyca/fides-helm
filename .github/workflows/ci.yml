@@ -29,3 +29,11 @@ jobs:
         working-directory: ./fides/
         id: helm-dependency
         run: helm dependency build
+      - name: Lint Helm - Fides-minimal
+        working-directory: ./fides-minimal/
+        id: helm-lint-minimal
+        run: helm lint
+      - name: Fides - Check Helm Dependencies
+        working-directory: ./fides-minimal/
+        id: helm-dependency-minimal
+        run: helm dependency build
