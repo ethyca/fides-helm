@@ -15,19 +15,31 @@ jobs:
       - name: Checkout
         id: checkout-code
         uses: actions/checkout@v3
-      - name: Get Current Chart Version
+      - name: Fides - Get Current Chart Version
         id: get-chart-version
         working-directory: ./fides/
         run: |
           echo CHART_VERSION_CURRENT=$(yq '.version' Chart.yaml) >> $GITHUB_OUTPUT
           echo FIDES_VERSION_CURRENT=$(yq '.appVersion' Chart.yaml) >> $GITHUB_OUTPUT
           echo NEW_VERSION_FOR_CHANGELOG=$(sed 's/\.//g' <<< ${{ github.event.client_payload.tag }}) >> $GITHUB_OUTPUT
-      - name: Increase Chart Patch Version
+      - name: Fides-minimal - Get Current Chart Version
+        id: fides-minimal-get-chart-version
+        working-directory: ./fides-minimal/
+        run: |
+          echo CHART_VERSION_CURRENT=$(yq '.version' Chart.yaml) >> $GITHUB_OUTPUT
+          echo FIDES_VERSION_CURRENT=$(yq '.appVersion' Chart.yaml) >> $GITHUB_OUTPUT
+          echo NEW_VERSION_FOR_CHANGELOG=$(sed 's/\.//g' <<< ${{ github.event.client_payload.tag }}) >> $GITHUB_OUTPUT
+      - name: Fides - Increase Chart Patch Version
         id: chart-semver
         uses: "WyriHaximus/github-action-next-semvers@v1"
         with:
           version: ${{ steps.get-chart-version.outputs.CHART_VERSION_CURRENT }}
-      - name: Update Fides Version
+      - name: Fides-minimal - Increase Chart Patch Version
+        id: fides-minimal-chart-semver
+        uses: "WyriHaximus/github-action-next-semvers@v1"
+        with:
+          version: ${{ steps.fides-minimal-get-chart-version.outputs.CHART_VERSION_CURRENT }}
+      - name: Fides - Update Fides Version
         id: update-chart
         working-directory: ./fides/
         run: |
@@ -35,6 +47,15 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           yq '.appVersion = "${{ github.event.client_payload.tag }}"' Chart.yaml --inplace
           yq '.version = "${{ steps.chart-semver.outputs.patch }}"' Chart.yaml --inplace
+          echo BRANCH=version-fides-${{ github.event.client_payload.tag }} >> $GITHUB_OUTPUT
+      - name: Fides-minimal - Update Fides Version
+        id: fides-minimal-update-chart
+        working-directory: ./fides-minimal/
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          yq '.appVersion = "${{ github.event.client_payload.tag }}"' Chart.yaml --inplace
+          yq '.version = "${{ steps.fides-minimal-chart-semver.outputs.patch }}"' Chart.yaml --inplace
           echo BRANCH=version-fides-${{ github.event.client_payload.tag }} >> $GITHUB_OUTPUT
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
@@ -44,14 +65,19 @@ jobs:
           body: |
             # Fides Version Upgrade
 
-            * Upgrade Fides version from [`${{ steps.get-chart-version.outputs.FIDES_VERSION_CURRENT }}`](https://github.com/ethyca/fides/releases/tag/${{ steps.get-chart-version.outputs.FIDES_VERSION_CURRENT }}) to [`${{ github.event.client_payload.tag }}`](https://github.com/ethyca/fides/releases/tag/${{ github.event.client_payload.tag }})
-            * Increment Chart version from `${{ steps.get-chart-version.outputs.CHART_VERSION_CURRENT }}` to `${{ steps.chart-semver.outputs.patch }}`
+            * **Fides Chart** 
+              * Upgrade Fides version from [`${{ steps.get-chart-version.outputs.FIDES_VERSION_CURRENT }}`](https://github.com/ethyca/fides/releases/tag/${{ steps.get-chart-version.outputs.FIDES_VERSION_CURRENT }}) to [`${{ github.event.client_payload.tag }}`](https://github.com/ethyca/fides/releases/tag/${{ github.event.client_payload.tag }})
+              * Increment Chart version from `${{ steps.get-chart-version.outputs.CHART_VERSION_CURRENT }}` to `${{ steps.chart-semver.outputs.patch }}`
+            * **Fides-minimal Chart**
+              * Upgrade Fides version from [`${{ steps.fides-minimal-get-chart-version.outputs.FIDES_VERSION_CURRENT }}`](https://github.com/ethyca/fides/releases/tag/${{ steps.fides-minimal-get-chart-version.outputs.FIDES_VERSION_CURRENT }}) to [`${{ github.event.client_payload.tag }}`](https://github.com/ethyca/fides/releases/tag/${{ github.event.client_payload.tag }})
+              * Increment Chart version from `${{ steps.fides-minimal-get-chart-version.outputs.CHART_VERSION_CURRENT }}` to `${{ steps.fides-minimal-chart-semver.outputs.patch }}`
 
             ## Pre-merge Checklist
 
             - [ ] - Confirm that ${{ github.event.client_payload.tag }} is a valid version of Fides and is published to [Docker Hub](https://hub.docker.com/r/ethyca/fides/tags?page=1&name=${{ github.event.client_payload.tag }})
             - [ ] - Review [Changelog](https://github.com/ethyca/fides/blob/main/CHANGELOG.md#${{ steps.get-chart-version.outputs.NEW_VERSION_FOR_CHANGELOG }})
-            - [ ] - Confirm that ${{ steps.chart-semver.outputs.patch }} is the appropriate SemVer value for the new version of the chart
+            - [ ] - Confirm that ${{ steps.chart-semver.outputs.patch }} is the appropriate SemVer value for the new version of the **Fides** chart
+            - [ ] - Confirm that ${{ steps.fides-minimal-chart-semver.outputs.patch }} is the appropriate SemVer value for the new version of the **Fides-minimal** chart
             - [ ] - Test new chart for regressions - `git fetch origin ${{ steps.update-chart.outputs.BRANCH }} && git switch -c ${{ steps.update-chart.outputs.BRANCH }} origin/${{ steps.update-chart.outputs.BRANCH }}`
           labels: chore
           branch: ${{ steps.update-chart.outputs.BRANCH }}
