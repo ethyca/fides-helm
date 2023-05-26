@@ -43,7 +43,7 @@ helm pull ethyca/fides-minimal
 
 To install this chart, create a local values file to override the defaults and run the following command:
 ```sh
-helm install fides ethyca/fides --values values.local.yaml
+helm install fides ethyca/fides-minimal --values values.local.yaml
 ```
 
 ## Additional information
