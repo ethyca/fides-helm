@@ -14,7 +14,7 @@ Before deploying the Helm chart, you will need the several dependencies, dependi
   * A PostgreSQL database
   * A Kubernetes secret for the Postgres containing at least the following keys:
     * `DB_HOST`
-    * `DB_PORT` - \[Optional - Defaults to `5432`\]
+    * `DB_PORT`
     * `DB_DATABASE`
     * `DB_USERNAME`
     * `DB_PASSWORD`
@@ -22,8 +22,14 @@ Before deploying the Helm chart, you will need the several dependencies, dependi
   * A Redis cache
   * A Kubernetes secret for the Redis containing at least the following keys:
     * `REDIS_HOST`
-    * `REDIS_PORT` - \[Optional - Defaults to `6379`\]
+    * `REDIS_PORT`
     * `REDIS_PASSWORD`
+* Fides
+  * A Kubernetes secret for Fides containing at least the following keys:
+    * `FIDES__SECURITY__APP_ENCRYPTION_KEY`
+    * `FIDES__SECURITY__OAUTH_ROOT_CLIENT_ID`
+    * `FIDES__SECURITY__OAUTH_ROOT_CLIENT_SECRET`
+    * `FIDES__SECURITY__DRP_JWT_SECRET`
 
 ## Configuration
 
