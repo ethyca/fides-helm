@@ -993,4 +993,30 @@ entries:
     urls:
     - https://github.com/ethyca/fides-helm/releases/download/fides-0.1.1/fides-0.1.1.tgz
     version: 0.1.1
-generated: "2023-05-26T16:00:00.325451353Z"
+  fides-minimal:
+  - apiVersion: v2
+    appVersion: 2.13.0
+    created: "2023-05-30T14:32:36.284276867Z"
+    description: Fides is an open-source privacy engineering platform for managing
+      the fulfillment of data privacy requests in your runtime environment, and the
+      enforcement of privacy regulations in your code. This version of the Helm chart
+      removes some excess features such as the lookup function which may not be available
+      in all cases, such as ArgoCD.
+    digest: b4f9631bb0fa82daf3c0dfe59bfb9d2b05b1ca8454e9bab3cf844ffd69853bb7
+    home: https://fid.es
+    icon: https://raw.githubusercontent.com/ethyca/fides/main/docs/fides/docs/img/fides-logo.svg
+    keywords:
+    - fides
+    - fidesctl
+    - fidesops
+    - privacy
+    - gdpr
+    - ccpa
+    name: fides-minimal
+    sources:
+    - https://github.com/ethyca/fides
+    type: application
+    urls:
+    - https://github.com/ethyca/fides-helm/releases/download/fides-minimal-0.11.1/fides-minimal-0.11.1.tgz
+    version: 0.11.1
+generated: "2023-05-30T14:32:36.284425068Z"
