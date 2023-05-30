@@ -1,0 +1,14 @@
+■ Fides
+Version: {{ include "fides.dockerTag" . }}
+{{ if .Values.ingress.enabled }}
+Fides Admin UI: https://{{.Values.fides.publicHostname}}
+{{- if .Values.privacyCenter.enabled }}
+Privacy Center: https://{{.Values.privacyCenter.publicHostname}}
+{{- end }}
+{{- end }}
+{{ if .Release.IsInstall }}
+For more information, check out the following resources:
+  - Documentation and guides https://fid.es/docs
+  - Configuration reference: https://fid.es/config
+  - Slack community: https://fid.es/slack
+{{- end }}

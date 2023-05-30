@@ -1,0 +1,80 @@
+{{- if .Values.privacyCenter.enabled }}
+{{- $volume := "config" }}
+{{- $configPath := "/app/config" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fides.privacyCenter.fullname" . }}
+  labels:
+    {{- include "fides.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "fides.privacyCenter.selectorLabels" . | nindent 6 }}
+  strategy: 
+    {{- include "fides.deploymentStrategy" . | nindent 4 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "fides.privacyCenter.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "fides.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: privacy-center
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.privacyCenter.image.repository }}:{{ .Values.privacyCenter.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.privacyCenter.image.pullPolicy }}
+          env:
+            - name: FIDES_PRIVACY_CENTER__FIDES_API_URL
+              value: {{ printf "https://%s/api/v1" .Values.fides.publicHostname }}
+            - name: FIDES_PRIVACY_CENTER__CONFIG_JSON_URL
+              value: {{ printf "file://%s/config.json" $configPath }}
+            - name: FIDES_PRIVACY_CENTER__CONFIG_CSS_URL
+              value: {{ printf "file://%s/config.css" $configPath }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            failureThreshold: 24
+            periodSeconds: 5
+          volumeMounts:
+          - name: {{ $volume }}
+            mountPath: /app/config
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: {{ $volume }}
+          configMap:
+            name: {{(empty .Values.privacyCenter.configuration.configFilesOverrideConfigMap) | ternary (include "fides.privacyCenter.fullname" .) .Values.privacyCenter.configuration.configFilesOverrideConfigMap }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
