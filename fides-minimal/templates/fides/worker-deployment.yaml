@@ -1,0 +1,84 @@
+{{- $_ := set $ "worker" ( ge (.Values.fides.workers.count | int) 1) }}
+{{- if $.worker }}
+{{- $volume := "config" }}
+{{- $configPath := "/etc/fides/config" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fides.worker.fullname" . }}
+  labels:
+    {{- include "fides.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.fides.workers.count | int }}
+  selector:
+    matchLabels:
+      {{- include "fides.worker.selectorLabels" . | nindent 6 }}
+  strategy:
+    {{- include "fides.deploymentStrategy" . | nindent 4 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "fides.worker.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "fides.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: fides
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ printf "%s:%s" .Values.fides.image.repository ( include "fides.dockerTag" .)}}
+          imagePullPolicy: {{ .Values.fides.image.pullPolicy }}
+          command: ["fides"]
+          args: ["worker"]
+          env:
+            - name: FIDES__CONFIG_PATH
+              value: {{ printf "%s/fides.toml" $configPath }}
+            {{- include "fides.env" . | nindent 12 }}
+          envFrom:
+            - secretRef: 
+                name: {{ include "fides.fidesSecuritySecretName" . }}
+            {{- if .Values.fides.configuration.additionalEnvVarsSecret }}
+            - secretRef: 
+                name: {{ .Values.fides.configuration.additionalEnvVarsSecret }}
+            {{- end }}
+          livenessProbe:
+            exec:
+              command: [
+                "bash",
+                "-c",
+                "celery --quiet --no-color --app fides.api.ops.tasks inspect ping --destination celery@$HOSTNAME --json"
+              ]
+            initialDelaySeconds: {{ .Values.fides.startupTimeSeconds | default 30 }}
+            periodSeconds: 60
+            timeoutSeconds: {{ .Values.fides.healthCheckTimeoutSeconds | default 5 }}
+          volumeMounts:
+          - name: {{ $volume }}
+            mountPath: {{ $configPath }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: {{ $volume }}
+          configMap:
+            name: {{ include "fides.worker.tomlConfigMapName" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

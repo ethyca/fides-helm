@@ -1,0 +1,148 @@
+# Default values for Fides.
+
+# fides is the main application that runs the Admin UI and API endpoints.
+fides:
+  image:
+    repository: ethyca/fides
+    pullPolicy: IfNotPresent
+    # Overrides the Fides image tag whose default is the chart appVersion.
+    tag: ""
+  configuration:
+    # fides.configuration.dbSecretName is the name of the Kubernetes secret containing the Postgres connection information
+    # This secret should have at least the following keys: DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE. This value is required.
+    dbSecretName: ""
+    # fides.configuration.redisSecretName is the name of the Kubernetes secret containing the Redis connection information
+    # This secret should have at least the following keys: REDIS_HOST, REDIS_PORT, REDIS_PASSWORD. This value is required.
+    redisSecretName: ""
+    # fides.configure.additionalEnvVar adds arbitrary environment variables to the configuration, in addition to those set
+    # by the Helm chart. See https://ethyca.github.io/fides/installation/configuration/ for all possible values.
+    additionalEnvVars:
+      - name: FIDES__LOGGING__LOG_PII
+        value: "false"
+      - name: FIDES__LOGGING__LEVEL # Accepted values include: DEBUG, INFO, WARNING, ERROR, and CRITICAL.
+        value: "INFO"
+      - name: FIDES__EXECUTION__SUBJECT_IDENTITY_VERIFICATION_REQUIRED
+        value: "false"
+      - name: FIDES__EXECUTION__REQUIRE_MANUAL_REQUEST_APPROVAL
+        value: "true"
+      - name: FIDES__USER__ANALYTICS_OPT_OUT
+        value: "true"
+      - name: FIDES__REDIS__SSL
+        value: "false"
+      - name: FIDES__REDIS__SSL_CERT_REQS # Accepted values include: none, optional and require.
+        value: "none"
+      # Additional environment variables may be declared here.
+    # fides.configuration.additionalEnvVarsSecret is an optional parameter representing the name of an existing secret containing environment variables to pass into the Fides containers.
+    additionalEnvVarsSecret: ""
+    # fides.configuration.fidesSecuritySecretName is an optional parameter that respresents the name of a Kubernetes secret containing sensitive Fides configuration elements. If set, this secret must have the following keys:
+    # FIDES__SECURITY__APP_ENCRYPTION_KEY, FIDES__SECURITY__OAUTH_ROOT_CLIENT_ID, FIDES__SECURITY__OAUTH_ROOT_CLIENT_SECRET, FIDES__SECURITY__DRP_JWT_SECRET
+    fidesSecuritySecretName: ""
+    # fides.configuration.additionalCORSOrigins is an optional parameter to configure allowed CORS origins in addition to the Fides and Privacy Center URLs.
+    additionalCORSOrigins: []
+  # fides.publicHostname is used to set the allowed CORS origins for Fides, e.g. fides.example.com
+  publicHostname: ""
+  fullnameOverride: ""
+  service:
+    type: NodePort
+    port: 8080
+  # fides.startupTimeSeconds configures the delay before liveness and readiness probes begin.
+  # For local kubernetes clusters, such as minikube & kind, you may need to increase this value to 60 seconds.
+  startupTimeSeconds: 30
+  # fides.healthCheckTimeoutSeconds configures the timeoutSeconds of the liveness and readiness probes.
+  healthCheckTimeoutSeconds: 5
+  workers:
+    # fides.workers.count determines how many workers the deployment will use to process DSRs.
+    # To disable workers, set count to 0. This should be set to at least 1 in production environments.
+    count: 0
+
+# privacyCenter is the end-user facing application where data subjects can submit privacy requests.
+privacyCenter:
+  # privacyCenter.enabled determines whether a privacy center will be deployed.
+  enabled: true
+  image:
+    repository: ethyca/fides-privacy-center
+    pullPolicy: IfNotPresent
+    # Overrides the Fides Privacy Center image tag whose default is the chart appVersion.
+    tag: ""
+  configuration:
+    # privacyCenter.configuration.configJsonPath specifies the location of the config.json as described in https://ethyca.github.io/fides/ui/privacy_center/.
+    # Note: the value of server_url_production will be overwritten to use the hostname specified by ingress.hosts.fides
+    configJsonPath: config/privacyCenterConfig.json
+    # privacyCenter.configuration.configCSSPath specifies the location of the config.css file to override the default styles.
+    configCSSPath: config/privacyCenterConfig.css
+    # privacyCenter.configuration.configFilesOverride specifies the name of an existing configmap with the keys config.css and config.json containing the customization files.
+    configFilesOverrideConfigMap: ""
+  nameOverride: ""
+  # privacyCenter.publicHostname is used to set the allowed CORS origins for Fides, e.g. privacy.example.com
+  publicHostname: ""
+  fullnameOverride: ""
+  service:
+    type: NodePort
+    port: 3000
+
+nameOverride: ""
+imagePullSecrets: []
+
+# useRollingUpdate helps to minimize upgrade downtime by running deployment upgrades with a RollingUpdate strategy.
+# When useRollingUpdate is set to false, the Recreate strategy is used instead. For production deployments,
+# useRollingUpdate should be set to true.
+useRollingUpdate: true
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+ingress:
+  enabled: false
+  className: ""
+  installIngressController:
+    # installIngressController.awsLoadBalancerController is an option to install the AWS Load Balancer Controller
+    # as part of this chart.
+    awsLoadBalancerController: false
+  annotations:
+    {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  tls: []
+  #  - secretName: fides-tls
+  #    hosts:
+  #      - privacy.example.com
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
