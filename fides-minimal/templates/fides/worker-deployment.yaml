@@ -55,7 +55,7 @@ spec:
               command: [
                 "bash",
                 "-c",
-                "celery --quiet --no-color --app fides.api.ops.tasks inspect ping --destination celery@$HOSTNAME --json"
+                "celery --quiet --no-color --app fides.api.tasks inspect ping --destination celery@$HOSTNAME --json"
               ]
             initialDelaySeconds: {{ .Values.fides.startupTimeSeconds | default 30 }}
             periodSeconds: 60
