@@ -37,6 +37,12 @@ The types of changes are:
 
 - Add [CHANGELOG.md](./CHANGELOG.md) to [.helmignore](./.helmignore) file [#58](https://github.com/ethyca/fides-helm/pull/58)
 
+### Changed
+
+- Update `aws/aws-load-balancer-controller` sub-chart to [`1.5.3`](https://artifacthub.io/packages/helm/aws/aws-load-balancer-controller/1.5.3) [#58](https://github.com/ethyca/fides-helm/pull/58)
+- Update `bitnami/postgresql` sub-chart to [`12.5.6`](https://artifacthub.io/packages/helm/bitnami/postgresql/12.5.6) [#58](https://github.com/ethyca/fides-helm/pull/58)
+- Update `bitnami/redis` sub-chart to [`17.11.3`](https://artifacthub.io/packages/helm/bitnami/redis/17.11.3) [#58](https://github.com/ethyca/fides-helm/pull/58)
+
 ## [0.12.0](https://github.com/ethyca/fides-helm/compare/fides-0.11.2...fides-0.12.0)
 
 ### Fixed
