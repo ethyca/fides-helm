@@ -14,7 +14,7 @@ fides:
     # fides.configuration.redisSecretName is the name of the Kubernetes secret containing the Redis connection information
     # This secret should have at least the following keys: REDIS_HOST, REDIS_PORT, REDIS_PASSWORD. This value is required.
     redisSecretName: ""
-    # fides.configure.additionalEnvVar adds arbitrary environment variables to the configuration, in addition to those set
+    # fides.configure.additionalEnvVar adds arbitrary environment variables to the Fides configuration, in addition to those set
     # by the Helm chart. See https://ethyca.github.io/fides/installation/configuration/ for all possible values.
     additionalEnvVars:
       - name: FIDES__LOGGING__LOG_PII
@@ -74,6 +74,9 @@ privacyCenter:
     configFilesOverrideConfigMap: ""
     # privacyCenter.configuration.debug enables debug mode in the Fides Privacy Center.
     debug: false
+    # privacyCenter.configuration.additionalEnvVars adds arbitrary environment variables to the Privacy Center configuration
+    # in addition to those set by the Helm chart. Each entry must have a key called "name" and a key called "value"
+    additionalEnvVars: []
   nameOverride: ""
   # privacyCenter.publicHostname is used to set the allowed CORS origins for Fides, e.g. privacy.example.com
   publicHostname: ""
