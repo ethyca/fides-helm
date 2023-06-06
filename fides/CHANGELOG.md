@@ -16,17 +16,26 @@ The types of changes are:
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities.
 
-## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.12.0...main)
+## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.13.0...main)
 
 ### Added
 
 
 ### Fixed
 
-- Add [CHANGELOG.md](./CHANGELOG.md) to [.helmignore](./.helmignore) file [#58](https://github.com/ethyca/fides-helm/pull/58)
 
 ### Changed
 
+
+## [0.13.0](https://github.com/ethyca/fides-helm/compare/fides-0.12.0...fides-0.13.0)
+
+### Added
+
+- Add privacy center configuration options to [values.yaml](./values.yaml) [#58](https://github.com/ethyca/fides-helm/pull/58)
+
+### Fixed
+
+- Add [CHANGELOG.md](./CHANGELOG.md) to [.helmignore](./.helmignore) file [#58](https://github.com/ethyca/fides-helm/pull/58)
 
 ## [0.12.0](https://github.com/ethyca/fides-helm/compare/fides-0.11.2...fides-0.12.0)
 
