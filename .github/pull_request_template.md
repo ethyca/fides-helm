@@ -12,3 +12,5 @@ Closes ###
 * [ ] Documentation Updated
 * [ ] Increment Applicable Chart Versions
 * [ ] Relevant Follow-Up Issues Created
+* [ ] Update the Fides chart [CHANGELOG.md](https://github.com/ethyca/fides-helm/blob/main/fides/CHANGELOG.md)
+* [ ] Update the Fides-minimal chart [CHANGELOG.md](https://github.com/ethyca/fides-helm/blob/main/fides-minimal/CHANGELOG.md)
