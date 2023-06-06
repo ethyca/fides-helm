@@ -79,6 +79,8 @@ jobs:
             - [ ] - Confirm that ${{ steps.chart-semver.outputs.patch }} is the appropriate SemVer value for the new version of the **Fides** chart
             - [ ] - Confirm that ${{ steps.fides-minimal-chart-semver.outputs.patch }} is the appropriate SemVer value for the new version of the **Fides-minimal** chart
             - [ ] - Test new chart for regressions - `git fetch origin ${{ steps.update-chart.outputs.BRANCH }} && git switch -c ${{ steps.update-chart.outputs.BRANCH }} origin/${{ steps.update-chart.outputs.BRANCH }}`
+            - [ ] Update the Fides chart [CHANGELOG.md](https://github.com/ethyca/fides-helm/blob/main/fides/CHANGELOG.md)
+            - [ ] Update the Fides-minimal chart [CHANGELOG.md](https://github.com/ethyca/fides-helm/blob/main/fides-minimal/CHANGELOG.md)            
           labels: chore
           branch: ${{ steps.update-chart.outputs.BRANCH }}
           base: main
