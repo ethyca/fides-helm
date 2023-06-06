@@ -72,6 +72,7 @@ privacyCenter:
     configCSSPath: config/privacyCenterConfig.css
     # privacyCenter.configuration.configFilesOverride specifies the name of an existing configmap with the keys config.css and config.json containing the customization files.
     configFilesOverrideConfigMap: ""
+    # privacyCenter.configuration.debug enables debug mode in the Fides Privacy Center.
     debug: false
   nameOverride: ""
   # privacyCenter.publicHostname is used to set the allowed CORS origins for Fides, e.g. privacy.example.com
