@@ -45,7 +45,7 @@ spec:
             - name: FIDES_PRIVACY_CENTER__DEBUG
               value: {{ .Values.privacyCenter.configuration.debug | quote }}
             - name: FIDES_PRIVACY_CENTER__PRIVACY_CENTER_URL
-              value: {{ printf "https://%s".Values.privacyCenter.publicHostname }}
+              value: {{ printf "https://%s" .Values.privacyCenter.publicHostname }}
             {{- .Values.privacyCenter.config.additionalEnvVars | toYaml | nindent 12 }}
           ports:
             - name: http
