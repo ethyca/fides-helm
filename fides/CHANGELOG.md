@@ -23,6 +23,7 @@ The types of changes are:
 
 ### Fixed
 
+- Add [CHANGELOG.md](./CHANGELOG.md) to [.helmignore](./.helmignore) file [#58](https://github.com/ethyca/fides-helm/pull/58)
 
 ### Changed
 
