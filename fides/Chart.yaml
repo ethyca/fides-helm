@@ -6,8 +6,6 @@ description: Fides is an open-source privacy engineering platform for managing t
 type: application
 keywords:
   - fides
-  - fidesctl
-  - fidesops
   - privacy
   - gdpr
   - ccpa
