@@ -1,12 +1,12 @@
 dependencies:
 - name: aws-load-balancer-controller
   repository: https://aws.github.io/eks-charts
-  version: 1.4.8
+  version: 1.5.3
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 12.2.2
+  version: 12.5.6
 - name: redis
   repository: https://charts.bitnami.com/bitnami
-  version: 17.8.2
-digest: sha256:60217aaea0352e75d6ade9886fe3f3fbd07a5b41368094e64bf4af41a5f46038
-generated: "2023-03-30T17:26:58.506235-05:00"
+  version: 17.11.3
+digest: sha256:5de3e1c4ee355e114b6ed744fe98f49a233870bef9c2970ab117bee1b9be6dd4
+generated: "2023-06-06T16:15:59.087467-05:00"
