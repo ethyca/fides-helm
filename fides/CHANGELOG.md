@@ -16,13 +16,19 @@ The types of changes are:
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities.
 
-## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.13.0...main)
+## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.13.1...main)
 
 ### Added
 
 
 ### Fixed
 
+
+### Changed
+
+## [0.13.1](https://github.com/ethyca/fides-helm/compare/fides-0.13.0...fides-0.13.1)
+
+- Upgrade Fides version to [`2.14.1`](https://github.com/ethyca/fides/releases/tag/2.14.1) [#59](https://github.com/ethyca/fides-helm/pull/59)
 
 ### Changed
 
