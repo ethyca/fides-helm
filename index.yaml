@@ -2,6 +2,40 @@ apiVersion: v1
 entries:
   fides:
   - apiVersion: v2
+    appVersion: 2.14.2
+    created: "2023-06-13T20:18:38.304951191Z"
+    dependencies:
+    - condition: ingress.installIngressController.awsLoadBalancerController
+      name: aws-load-balancer-controller
+      repository: https://aws.github.io/eks-charts
+      version: 1.5.3
+    - condition: postgresql.deployPostgres
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.5.6
+    - condition: redis.deployRedis
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.11.3
+    description: Fides is an open-source privacy engineering platform for managing
+      the fulfillment of data privacy requests in your runtime environment, and the
+      enforcement of privacy regulations in your code.
+    digest: 0881908d9cddbd4a2ee7c32e34ad7bde3595b174c9307926b7ad1d22b2046f61
+    home: https://fid.es
+    icon: https://raw.githubusercontent.com/ethyca/fides/main/docs/fides/docs/img/fides-logo.svg
+    keywords:
+    - fides
+    - privacy
+    - gdpr
+    - ccpa
+    name: fides
+    sources:
+    - https://github.com/ethyca/fides
+    type: application
+    urls:
+    - https://github.com/ethyca/fides-helm/releases/download/fides-0.13.2/fides-0.13.2.tgz
+    version: 0.13.2
+  - apiVersion: v2
     appVersion: 2.14.1
     created: "2023-06-08T14:50:24.504339429Z"
     dependencies:
@@ -1135,6 +1169,29 @@ entries:
     version: 0.1.1
   fides-minimal:
   - apiVersion: v2
+    appVersion: 2.14.2
+    created: "2023-06-13T20:18:38.464614581Z"
+    description: Fides is an open-source privacy engineering platform for managing
+      the fulfillment of data privacy requests in your runtime environment, and the
+      enforcement of privacy regulations in your code. This version of the Helm chart
+      removes some excess features such as the lookup function which may not be available
+      in all cases.
+    digest: 2241d0caa3d40f994189a3dc3416f5b789966c49ea727b6b528012542e79e55c
+    home: https://fid.es
+    icon: https://raw.githubusercontent.com/ethyca/fides/main/docs/fides/docs/img/fides-logo.svg
+    keywords:
+    - fides
+    - privacy
+    - gdpr
+    - ccpa
+    name: fides-minimal
+    sources:
+    - https://github.com/ethyca/fides
+    type: application
+    urls:
+    - https://github.com/ethyca/fides-helm/releases/download/fides-minimal-0.13.2/fides-minimal-0.13.2.tgz
+    version: 0.13.2
+  - apiVersion: v2
     appVersion: 2.14.1
     created: "2023-06-08T14:50:24.736981742Z"
     description: Fides is an open-source privacy engineering platform for managing
@@ -1255,4 +1312,4 @@ entries:
     urls:
     - https://github.com/ethyca/fides-helm/releases/download/fides-minimal-0.11.1/fides-minimal-0.11.1.tgz
     version: 0.11.1
-generated: "2023-06-08T14:50:24.737675748Z"
+generated: "2023-06-13T20:18:38.465230219Z"
