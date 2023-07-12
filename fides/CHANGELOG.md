@@ -26,6 +26,11 @@ The types of changes are:
 
 ### Changed
 
+## [0.13.5](https://github.com/ethyca/fides-helm/compare/fides-0.13.4...fides-0.13.5)
+
+### Changed
+- Upgrade Fides version to [`2.16.0`](https://github.com/ethyca/fides/releases/tag/2.16.0) [#63](https://github.com/ethyca/fides-helm/pull/63)
+
 ## [0.13.4](https://github.com/ethyca/fides-helm/compare/fides-0.13.3...fides-0.13.4)
 
 ### Changed
