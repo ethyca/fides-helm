@@ -64,7 +64,7 @@ spec:
           - name: {{ $volume }}
             mountPath: {{ $configPath }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.fides.resources | nindent 12 }}
       volumes:
         - name: {{ $volume }}
           configMap:
