@@ -56,6 +56,15 @@ fides:
     # fides.workers.count determines how many workers the deployment will use to process DSRs.
     # To disable workers, set count to 0. This should be set to at least 1 in production environments.
     count: 0
+  resources: {}
+    # If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 2048Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 2048Mi
 
 # privacyCenter is the end-user facing application where data subjects can submit privacy requests.
 privacyCenter:
@@ -86,6 +95,15 @@ privacyCenter:
   service:
     type: NodePort
     port: 3000
+  resources: {}
+    # If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 1024Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 1024Mi
 
 postgresql:
   # postgresql.deployPostgres configures whether to install and configure the Bitnami Postgresql Helm chart
@@ -151,19 +169,6 @@ ingress:
   #  - secretName: fides-tls
   #    hosts:
   #      - privacy.example.com
-
-resources:
-  {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
 
 nodeSelector: {}
 

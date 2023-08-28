@@ -16,7 +16,7 @@ The types of changes are:
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities.
 
-## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.13.2...main)
+## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.14.0...main)
 
 ### Added
 
@@ -26,6 +26,10 @@ The types of changes are:
 
 ### Changed
 
+## [0.14.0](https://github.com/ethyca/fides-helm/compare/fides-0.13.8...fides-0.14.0)
+
+### Changed
+- **Breaking** Resources now specified at the fides and privacyCenter level. [#68](https://github.com/ethyca/fides-helm/pull/68)
 
 ## [0.13.8](https://github.com/ethyca/fides-helm/compare/fides-0.13.7...fides-0.13.8)
 
