@@ -61,10 +61,10 @@ fides:
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     # limits:
     #   cpu: 100m
-    #   memory: 128Mi
+    #   memory: 2048Mi
     # requests:
     #   cpu: 100m
-    #   memory: 128Mi
+    #   memory: 2048Mi
 
 # privacyCenter is the end-user facing application where data subjects can submit privacy requests.
 privacyCenter:
@@ -100,10 +100,10 @@ privacyCenter:
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     # limits:
     #   cpu: 100m
-    #   memory: 128Mi
+    #   memory: 1024Mi
     # requests:
     #   cpu: 100m
-    #   memory: 128Mi
+    #   memory: 1024Mi
 
 postgresql:
   # postgresql.deployPostgres configures whether to install and configure the Bitnami Postgresql Helm chart
