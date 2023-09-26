@@ -56,8 +56,17 @@ fides:
     # fides.workers.count determines how many workers the deployment will use to process DSRs.
     # To disable workers, set count to 0. This should be set to at least 1 in production environments.
     count: 0
+    resources: {}
+    # If you do want to specify resources for the worker, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 2048Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 2048Mi
   resources: {}
-    # If you do want to specify resources, uncomment the following
+    # If you do want to specify resources for Fides, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     # limits:
     #   cpu: 100m
@@ -96,7 +105,7 @@ privacyCenter:
     type: NodePort
     port: 3000
   resources: {}
-    # If you do want to specify resources, uncomment the following
+    # If you do want to specify resources for the Privacy Center, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     # limits:
     #   cpu: 100m
