@@ -16,7 +16,7 @@ The types of changes are:
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities.
 
-## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.14.1...main)
+## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.15...main)
 
 ### Added
 
@@ -25,6 +25,12 @@ The types of changes are:
 
 
 ### Changed
+
+## [0.15.0](https://github.com/ethyca/fides-helm/compare/fides-0.14.1...fides-0.15.0)
+
+### Changed
+- Upgrade Fides version to [`2.20.1`](https://github.com/ethyca/fides/releases/tag/2.20.1) [#73](https://github.com/ethyca/fides-helm/pull/73)
+- Allow Fides Worker resources to be allocated separately from Fides Webserver resources [#73](https://github.com/ethyca/fides-helm/pull/73)
 
 ## [0.14.1](https://github.com/ethyca/fides-helm/compare/fides-0.14.0...fides-0.14.1)
 
