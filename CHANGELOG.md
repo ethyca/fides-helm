@@ -26,6 +26,14 @@ The types of changes are:
 
 ### Changed
 
+## [0.15.1](https://github.com/ethyca/fides-helm/compare/fides-0.15.0...fides-0.15.1)
+
+### Changed
+- Upgrade Fides version to [`2.36.0`](https://github.com/ethyca/fides/releases/tag/2.36.0) [#77](https://github.com/ethyca/fides-helm/pull/77)
+- Synchronize chart versions between `fides` and `fides-minimal` [#77](https://github.com/ethyca/fides-helm/pull/77)
+- Move CHANGELOG.md to root of directory [#77](https://github.com/ethyca/fides-helm/pull/77)
+- Add Kubernetes annotations to services [#76](https://github.com/ethyca/fides-helm/pull/76)
+
 ## [0.15.0](https://github.com/ethyca/fides-helm/compare/fides-0.14.1...fides-0.15.0)
 
 ### Changed
