@@ -43,6 +43,7 @@ spec:
             - name: FIDES__CONFIG_PATH
               value: {{ printf "%s/fides.toml" $configPath }}
             {{- include "fides.env" . | nindent 12 }}
+            {{- include "custom_fides_secrets" . | indent 10 }}
           envFrom:
             - secretRef: 
                 name: {{ include "fides.fidesSecuritySecretName" . }}
