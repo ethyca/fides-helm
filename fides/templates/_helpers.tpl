@@ -242,3 +242,15 @@ The set of environment variables for Fides and workers
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{/* User defined Fides secrets */}}
+{{- define "custom_fides_secrets" }}
+  # Dynamically created secret envs
+  {{- range $i, $config := .Values.secret }}
+  - name: {{ $config.envName }}
+    valueFrom:
+      secretKeyRef:
+        name: {{ $config.secretName }}
+        key: {{ default "value" $config.secretKey }}
+  {{- end }}
+{{- end }}

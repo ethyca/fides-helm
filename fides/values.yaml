@@ -133,6 +133,12 @@ s3:
   # s3.region sets the location constraint and may be set to any valid AWS region.
   region: us-east-1
 
+# Secrets for all fides containers
+secret: []
+# - envName: ""
+#   secretName: ""
+#   secretKey: ""
+
 nameOverride: ""
 imagePullSecrets: []
 
