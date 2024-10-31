@@ -108,6 +108,7 @@ privacyCenter:
   service:
     type: NodePort
     port: 3000
+    count: 1
   resources:
     {}
     # If you do want to specify resources for the Privacy Center, uncomment the following

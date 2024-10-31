@@ -86,6 +86,7 @@ privacyCenter:
   service:
     type: NodePort
     port: 3000
+    count: 1
 
 nameOverride: ""
 imagePullSecrets: []
