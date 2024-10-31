@@ -48,6 +48,7 @@ fides:
     type: NodePort
     port: 8080
     annotations: {}
+    count: 1
 
   # fides.startupTimeSeconds configures the delay before liveness and readiness probes begin.
   # For local kubernetes clusters, such as minikube & kind, you may need to increase this value to 60 seconds.
@@ -67,7 +68,8 @@ fides:
     # requests:
     #   cpu: 100m
     #   memory: 2048Mi
-  resources: {}
+  resources:
+    {}
     # If you do want to specify resources for Fides, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     # limits:
@@ -106,7 +108,8 @@ privacyCenter:
   service:
     type: NodePort
     port: 3000
-  resources: {}
+  resources:
+    {}
     # If you do want to specify resources for the Privacy Center, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     # limits:
