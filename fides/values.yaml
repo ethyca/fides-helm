@@ -44,6 +44,7 @@ fides:
   # fides.publicHostname is used to set the allowed CORS origins for Fides, e.g. fides.example.com
   publicHostname: ""
   fullnameOverride: ""
+  count: 1
   service:
     type: NodePort
     port: 8080
@@ -67,7 +68,8 @@ fides:
     # requests:
     #   cpu: 100m
     #   memory: 2048Mi
-  resources: {}
+  resources:
+    {}
     # If you do want to specify resources for Fides, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     # limits:
@@ -103,10 +105,12 @@ privacyCenter:
   # privacyCenter.publicHostname is used to set the allowed CORS origins for Fides, e.g. privacy.example.com
   publicHostname: ""
   fullnameOverride: ""
+  count: 1
   service:
     type: NodePort
     port: 3000
-  resources: {}
+  resources:
+    {}
     # If you do want to specify resources for the Privacy Center, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     # limits:

@@ -42,10 +42,12 @@ fides:
   # fides.publicHostname is used to set the allowed CORS origins for Fides, e.g. fides.example.com
   publicHostname: ""
   fullnameOverride: ""
+  count: 1
   service:
     type: NodePort
     port: 8080
-    annotations: {} 
+    annotations: {}
+
   # fides.startupTimeSeconds configures the delay before liveness and readiness probes begin.
   # For local kubernetes clusters, such as minikube & kind, you may need to increase this value to 60 seconds.
   startupTimeSeconds: 30
@@ -82,6 +84,7 @@ privacyCenter:
   # privacyCenter.publicHostname is used to set the allowed CORS origins for Fides, e.g. privacy.example.com
   publicHostname: ""
   fullnameOverride: ""
+  count: 1
   service:
     type: NodePort
     port: 3000

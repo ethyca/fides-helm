@@ -8,6 +8,7 @@ metadata:
   labels:
     {{- include "fides.labels" . | nindent 4 }}
 spec:
+  replicas: {{ .Values.privacyCenter.count | int }}
   selector:
     matchLabels:
       {{- include "fides.privacyCenter.selectorLabels" . | nindent 6 }}
