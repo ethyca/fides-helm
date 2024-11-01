@@ -16,12 +16,20 @@ The types of changes are:
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities.
 
-## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.15...main)
+## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.16.1...main)
 
 ### Added
 
 
 ### Fixed
+
+## [0.16.1](https://github.com/ethyca/fides-helm/compare/fides-0.15.0...fides-0.16.1)
+
+### Added
+- Ability to set replica count for Fides Webservers and Fides Privacy Center [#79](https://github.com/ethyca/fides-helm/pull/79)
+
+### Changed
+- Upgrade Fides version to [`2.48.1`](https://github.com/ethyca/fides/releases/tag/2.48.1) [#79](https://github.com/ethyca/fides-helm/pull/79)
 
 
 ### Changed
