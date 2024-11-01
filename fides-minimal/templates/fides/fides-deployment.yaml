@@ -7,7 +7,7 @@ metadata:
   labels:
     {{- include "fides.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.fides.service.count | int }}
+  replicas: {{ .Values.fides.count | int }}
   selector:
     matchLabels:
       {{- include "fides.fides.selectorLabels" . | nindent 6 }}
