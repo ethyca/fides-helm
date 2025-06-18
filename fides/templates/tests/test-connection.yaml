@@ -8,8 +8,12 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
+  securityContext:
+    {{- toYaml .Values.podSecurityContext | nindent 8 }}
   containers:
     - name: fides
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 12 }}
       image: {{ printf "%s:%s" .Values.fides.image.repository ( include "fides.dockerTag" .)}}
       imagePullPolicy: {{ .Values.fides.image.pullPolicy }}
       env:
