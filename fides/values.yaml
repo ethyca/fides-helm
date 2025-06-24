@@ -16,6 +16,9 @@ fides:
     # This secret should have at least the following keys: REDIS_HOST, REDIS_PORT, REDIS_PASSWORD. This value is required if
     # the value of redis.deployRedis is false.
     redisSecretName: ""
+    # fides.configuration.redisCaSecretName is the name of the Kubernetes secret containing the Redis CA certificate.
+    # This secret should have at least the following keys: ca.crt. This value is required if the value of redis.deployRedis is true.
+    redisCaSecretName: ""
     # fides.configure.additionalEnvVar adds arbitrary environment variables to the Fides configuration, in addition to those set
     # by the Helm chart. See https://ethyca.github.io/fides/installation/configuration/ for all possible values.
     additionalEnvVars:

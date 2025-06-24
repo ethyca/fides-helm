@@ -230,6 +230,10 @@ The set of environment variables for Fides and workers
       name: {{ .redisSecretName }}
       key: REDIS_PORT
 {{- end }}
+{{- if $.Values.fides.configuration.redisCaSecretName }}
+- name: FIDES__REDIS__SSL_CA_CERTS
+  value: {{ printf "%s/ca.crt" (include "fides.redisCaPath" $) }}
+{{- end }}
 - name: FIDES__REDIS__PASSWORD
   valueFrom:
     secretKeyRef:
@@ -241,6 +245,34 @@ The set of environment variables for Fides and workers
       key: REDIS_PASSWORD
 {{- end }}
 {{- end }}
+{{- end }}
+
+{{/*
+Config volume name
+*/}}
+{{- define "fides.configVolume" -}}
+config
+{{- end }}
+
+{{/*
+Config path
+*/}}
+{{- define "fides.configPath" -}}
+/etc/fides/config
+{{- end }}
+
+{{/*
+Redis CA volume name
+*/}}
+{{- define "fides.redisCaVolume" -}}
+redis-ca
+{{- end }}
+
+{{/*
+Redis CA path
+*/}}
+{{- define "fides.redisCaPath" -}}
+/etc/fides/redis-ca
 {{- end }}
 
 {{/* User defined Fides secrets */}}

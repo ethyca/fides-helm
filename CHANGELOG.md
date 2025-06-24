@@ -20,23 +20,37 @@ The types of changes are:
 
 ### Added
 
+### Fixed
+
+## [0.17.0](https://github.com/ethyca/fides-helm/compare/fides-0.16.1...fides-0.17.0)
+
+### Added
+
+- Add support for Redis SSL CA certificates via a new `fides.configuration.redisCaSecretName` value [#81](https://github.com/ethyca/fides-helm/pull/81)
+
+### Changed
+
+- Upgrade Fides version to [`2.64.0`](https://github.com/ethyca/fides/releases/tag/2.64.0) [#81](https://github.com/ethyca/fides-helm/pull/81)
+- Convert configuration variables to use named templates to improve consistency [#81](https://github.com/ethyca/fides-helm/pull/81)
 
 ### Fixed
+
+- `test-connection` pod did not use security context defined in the values file [#80](https://github.com/ethyca/fides-helm/pull/80)
 
 ## [0.16.1](https://github.com/ethyca/fides-helm/compare/fides-0.15.0...fides-0.16.1)
 
 ### Added
+
 - Ability to set replica count for Fides Webservers and Fides Privacy Center [#79](https://github.com/ethyca/fides-helm/pull/79)
 
 ### Changed
+
 - Upgrade Fides version to [`2.48.1`](https://github.com/ethyca/fides/releases/tag/2.48.1) [#79](https://github.com/ethyca/fides-helm/pull/79)
-
-
-### Changed
 
 ## [0.15.1](https://github.com/ethyca/fides-helm/compare/fides-0.15.0...fides-0.15.1)
 
 ### Changed
+
 - Upgrade Fides version to [`2.36.0`](https://github.com/ethyca/fides/releases/tag/2.36.0) [#77](https://github.com/ethyca/fides-helm/pull/77)
 - Synchronize chart versions between `fides` and `fides-minimal` [#77](https://github.com/ethyca/fides-helm/pull/77)
 - Move CHANGELOG.md to root of directory [#77](https://github.com/ethyca/fides-helm/pull/77)
@@ -45,51 +59,62 @@ The types of changes are:
 ## [0.15.0](https://github.com/ethyca/fides-helm/compare/fides-0.14.1...fides-0.15.0)
 
 ### Changed
+
 - Upgrade Fides version to [`2.20.1`](https://github.com/ethyca/fides/releases/tag/2.20.1) [#73](https://github.com/ethyca/fides-helm/pull/73)
 - Allow Fides Worker resources to be allocated separately from Fides Webserver resources [#73](https://github.com/ethyca/fides-helm/pull/73)
 
 ## [0.14.1](https://github.com/ethyca/fides-helm/compare/fides-0.14.0...fides-0.14.1)
 
 ### Changed
+
 - Upgrade Fides version to [`2.19.1`](https://github.com/ethyca/fides/releases/tag/2.19.1) [#70](https://github.com/ethyca/fides-helm/pull/70)
 
 ## [0.14.0](https://github.com/ethyca/fides-helm/compare/fides-0.13.8...fides-0.14.0)
 
 ### Changed
+
 - **Breaking** Resources now specified at the fides and privacyCenter level. [#68](https://github.com/ethyca/fides-helm/pull/68)
 
 ## [0.13.8](https://github.com/ethyca/fides-helm/compare/fides-0.13.7...fides-0.13.8)
 
 ### Changed
+
 - Upgrade Fides version to [`2.18.0`](https://github.com/ethyca/fides/releases/tag/2.18.0) [#67](https://github.com/ethyca/fides-helm/pull/67)
+
 ## [0.13.7](https://github.com/ethyca/fides-helm/compare/fides-0.13.6...fides-0.13.7)
 
 ### Changed
+
 - Upgrade Fides version to [`2.17.1`](https://github.com/ethyca/fides/releases/tag/2.17.1) [#66](https://github.com/ethyca/fides-helm/pull/66)
 
 ## [0.13.6](https://github.com/ethyca/fides-helm/compare/fides-0.13.5...fides-0.13.6)
 
 ### Changed
+
 - Upgrade Fides version to [`2.17.0`](https://github.com/ethyca/fides/releases/tag/2.17.0) [#64](https://github.com/ethyca/fides-helm/pull/64)
 
 ## [0.13.5](https://github.com/ethyca/fides-helm/compare/fides-0.13.4...fides-0.13.5)
 
 ### Changed
+
 - Upgrade Fides version to [`2.16.0`](https://github.com/ethyca/fides/releases/tag/2.16.0) [#63](https://github.com/ethyca/fides-helm/pull/63)
 
 ## [0.13.4](https://github.com/ethyca/fides-helm/compare/fides-0.13.3...fides-0.13.4)
 
 ### Changed
+
 - Upgrade Fides version to [`2.15.1`](https://github.com/ethyca/fides/releases/tag/2.15.1) [#62](https://github.com/ethyca/fides-helm/pull/62)
 
 ## [0.13.3](https://github.com/ethyca/fides-helm/compare/fides-0.13.2...fides-0.13.3)
 
 ### Changed
+
 - Upgrade Fides version to [`2.15.0`](https://github.com/ethyca/fides/releases/tag/2.15.0) [#61](https://github.com/ethyca/fides-helm/pull/61)
 
 ## [0.13.2](https://github.com/ethyca/fides-helm/compare/fides-0.13.1...fides-0.13.2)
 
 ### Changed
+
 - Upgrade Fides version to [`2.14.2`](https://github.com/ethyca/fides/releases/tag/2.14.2) [#60](https://github.com/ethyca/fides-helm/pull/60)
 
 ## [0.13.1](https://github.com/ethyca/fides-helm/compare/fides-0.13.0...fides-0.13.1)
@@ -97,7 +122,6 @@ The types of changes are:
 - Upgrade Fides version to [`2.14.1`](https://github.com/ethyca/fides/releases/tag/2.14.1) [#59](https://github.com/ethyca/fides-helm/pull/59)
 
 ### Changed
-
 
 ## [0.13.0](https://github.com/ethyca/fides-helm/compare/fides-0.12.0...fides-0.13.0)
 
@@ -120,4 +144,3 @@ The types of changes are:
 ### Fixed
 
 - Fixed the `LivenessProbe` for the worker, following a code change in Fides [#56](https://github.com/ethyca/fides-helm/pull/56)
-

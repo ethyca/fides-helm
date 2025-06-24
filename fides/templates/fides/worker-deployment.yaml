@@ -1,7 +1,5 @@
 {{- $_ := set $ "worker" ( ge (.Values.fides.workers.count | int) 1) }}
 {{- if $.worker }}
-{{- $configVolume := "config" }}
-{{- $configPath := "/etc/fides/config" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -41,7 +39,7 @@ spec:
           args: ["worker"]
           env:
             - name: FIDES__CONFIG_PATH
-              value: {{ printf "%s/fides.toml" $configPath }}
+              value: {{ printf "%s/fides.toml" (include "fides.configPath" .) }}
             {{- include "fides.env" . | nindent 12 }}
             {{- include "custom_fides_secrets" . | indent 10 }}
           envFrom:
@@ -62,14 +60,20 @@ spec:
             periodSeconds: 60
             timeoutSeconds: {{ .Values.fides.healthCheckTimeoutSeconds | default 5 }}
           volumeMounts:
-          - name: {{ $configVolume }}
-            mountPath: {{ $configPath }}
+          - name: {{ include "fides.configVolume" . }}
+            mountPath: {{ include "fides.configPath" . }}
+          - name: {{ include "fides.redisCaVolume" . }}
+            mountPath: {{ include "fides.redisCaPath" . }}
+            readOnly: true
           resources:
             {{- toYaml .Values.fides.workers.resources | nindent 12 }}
       volumes:
-        - name: {{ $configVolume }}
+        - name: {{ include "fides.configVolume" . }}
           configMap:
             name: {{ include "fides.worker.tomlConfigMapName" . }}
+        - name: {{ include "fides.redisCaVolume" . }}
+          secret:
+            secretName: {{ .Values.fides.configuration.redisCaSecretName }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
