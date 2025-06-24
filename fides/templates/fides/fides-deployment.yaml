@@ -1,4 +1,4 @@
-{{- $volume := "config" }}
+{{- $configVolume := "config" }}
 {{- $configPath := "/etc/fides/config" }}
 apiVersion: apps/v1
 kind: Deployment
@@ -66,12 +66,12 @@ spec:
             periodSeconds: 10
             timeoutSeconds: {{ .Values.fides.healthCheckTimeoutSeconds | default 5 }}
           volumeMounts:
-          - name: {{ $volume }}
+          - name: {{ $configVolume }}
             mountPath: {{ $configPath }}
           resources:
             {{- toYaml .Values.fides.resources | nindent 12 }}
       volumes:
-        - name: {{ $volume }}
+        - name: {{ $configVolume }}
           configMap:
             name: {{ include "fides.tomlConfigMapName" . }}
       {{- with .Values.nodeSelector }}

@@ -1,6 +1,6 @@
 {{- $_ := set $ "worker" ( ge (.Values.fides.workers.count | int) 1) }}
 {{- if $.worker }}
-{{- $volume := "config" }}
+{{- $configVolume := "config" }}
 {{- $configPath := "/etc/fides/config" }}
 apiVersion: apps/v1
 kind: Deployment
@@ -62,12 +62,12 @@ spec:
             periodSeconds: 60
             timeoutSeconds: {{ .Values.fides.healthCheckTimeoutSeconds | default 5 }}
           volumeMounts:
-          - name: {{ $volume }}
+          - name: {{ $configVolume }}
             mountPath: {{ $configPath }}
           resources:
             {{- toYaml .Values.fides.workers.resources | nindent 12 }}
       volumes:
-        - name: {{ $volume }}
+        - name: {{ $configVolume }}
           configMap:
             name: {{ include "fides.worker.tomlConfigMapName" . }}
       {{- with .Values.nodeSelector }}
