@@ -67,18 +67,22 @@ spec:
           volumeMounts:
           - name: {{ include "fides.configVolume" . }}
             mountPath: {{ include "fides.configPath" . }}
+          {{- if .Values.fides.configuration.redisCaSecretName }}
           - name: {{ include "fides.redisCaVolume" . }}
             mountPath: {{ include "fides.redisCaPath" . }}
             readOnly: true
+          {{- end }}
           resources:
             {{- toYaml .Values.fides.resources | nindent 12 }}
       volumes:
         - name: {{ include "fides.configVolume" . }}
           configMap:
             name: {{ include "fides.tomlConfigMapName" . }}
+        {{- if .Values.fides.configuration.redisCaSecretName }}
         - name: {{ include "fides.redisCaVolume" . }}
           secret:
             secretName: {{ .Values.fides.configuration.redisCaSecretName }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

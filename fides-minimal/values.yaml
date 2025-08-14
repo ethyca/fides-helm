@@ -15,7 +15,7 @@ fides:
     # This secret should have at least the following keys: REDIS_HOST, REDIS_PORT, REDIS_PASSWORD. This value is required.
     redisSecretName: ""
     # fides.configure.additionalEnvVar adds arbitrary environment variables to the Fides configuration, in addition to those set
-    # by the Helm chart. See https://ethyca.github.io/fides/installation/configuration/ for all possible values.
+    # by the Helm chart. See https://www.ethyca.com/docs/dev-docs/configuration/configuration#fides-configuration-variable-reference for all possible values.
     additionalEnvVars:
       - name: FIDES__LOGGING__LOG_PII
         value: "false"
