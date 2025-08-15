@@ -16,11 +16,17 @@ The types of changes are:
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities.
 
-## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.16.1...main)
+## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.17.1...main)
 
 ### Added
 
 ### Fixed
+
+## [0.17.1](https://github.com/ethyca/fides-helm/compare/fides-0.17.0...fides-0.17.1)
+
+### Fixed
+
+- Redis cert is only mounted when used. [#82](https://github.com/ethyca/fides-helm/pull/82)
 
 ## [0.17.0](https://github.com/ethyca/fides-helm/compare/fides-0.16.1...fides-0.17.0)
 
