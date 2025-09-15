@@ -1,54 +1,79 @@
-{{- $_ := set $ "worker" ( ge (.Values.fides.workers.count | int) 1) }}
+{{- include "fides.worker.validateUniqueNames" . }}
+{{- $workers := .Values.fides.workerConfiguration.workers | default list }}
+{{- $_ := set $ "worker" ( ge (len $workers) 1) }}
+{{- $isFidesplus := include "fides.isFidesplus" . }}
 {{- if $.worker }}
+{{- range $workers }}
+{{- $workerCount := .count }}
+{{- if eq $isFidesplus "true" }}
+  {{- if eq .name "general" }}
+    {{- $workerCount = 0 }}
+  {{- else if or (eq .name "dsr") (eq .name "consent") (eq .name "other") }}
+    {{- $workerCount = 1 }}
+  {{- end }}
+{{- end }}
+{{- if gt ($workerCount | int) 0 }}
 {{- $volume := "config" }}
 {{- $configPath := "/etc/fides/config" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "fides.worker.fullname" . }}
+  name: {{ printf "%s-%s" (include "fides.worker.fullname" $) .name}}
   labels:
-    {{- include "fides.labels" . | nindent 4 }}
+    {{- include "fides.labels" $ | nindent 4 }}
+    fid.es/worker: {{ .name }}
 spec:
-  replicas: {{ .Values.fides.workers.count | int }}
+  replicas: {{ $workerCount | int }}
   selector:
     matchLabels:
-      {{- include "fides.worker.selectorLabels" . | nindent 6 }}
+      {{- include "fides.worker.selectorLabels" $ | nindent 6 }}
+      fid.es/worker: {{ .name }}
   strategy:
-    {{- include "fides.deploymentStrategy" . | nindent 4 }}
+    {{- include "fides.deploymentStrategy" $ | nindent 4 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with $.Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "fides.worker.selectorLabels" . | nindent 8 }}
+        {{- include "fides.worker.selectorLabels" $ | nindent 8 }}
+        fid.es/worker: {{ .name }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with $.Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "fides.serviceAccountName" . }}
+      serviceAccountName: {{ include "fides.serviceAccountName" $ }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml $.Values.podSecurityContext | nindent 8 }}
       containers:
         - name: fides
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: {{ printf "%s:%s" .Values.fides.image.repository ( include "fides.dockerTag" .)}}
-          imagePullPolicy: {{ .Values.fides.image.pullPolicy }}
+            {{- toYaml $.Values.securityContext | nindent 12 }}
+          image: {{ printf "%s:%s" $.Values.fides.image.repository (default (include "fides.dockerTag" $) .imageTagOverride) }}
+          imagePullPolicy: {{ $.Values.fides.image.pullPolicy }}
           command: ["fides"]
-          args: ["worker"]
+          {{- if and (hasKey . "queues") (hasKey . "excludeQueues") }}
+            {{- fail (printf "Worker '%s' cannot have both --queues and --exclude-queues passed" .name) }}
+          {{- end }}
+          args:
+            - worker
+            {{- if hasKey . "queues" }}
+            - {{ printf "--queues=%s" (join "," .queues) }}
+            {{- else if hasKey . "excludeQueues" }}
+            - {{ printf "--exclude-queues=%s" (join "," .excludeQueues) }}
+            {{- end }}
           env:
             - name: FIDES__CONFIG_PATH
               value: {{ printf "%s/fides.toml" $configPath }}
-            {{- include "fides.env" . | nindent 12 }}
+            {{- include "fides.env" $ | nindent 12 }}
           envFrom:
             - secretRef: 
-                name: {{ include "fides.fidesSecuritySecretName" . }}
-            {{- if .Values.fides.configuration.additionalEnvVarsSecret }}
+                name: {{ include "fides.fidesSecuritySecretName" $ }}
+            {{- if $.Values.fides.configuration.additionalEnvVarsSecret }}
             - secretRef: 
-                name: {{ .Values.fides.configuration.additionalEnvVarsSecret }}
+                name: {{ $.Values.fides.configuration.additionalEnvVarsSecret }}
             {{- end }}
           livenessProbe:
             exec:
@@ -57,28 +82,31 @@ spec:
                 "-c",
                 "celery --quiet --no-color --app fides.api.tasks inspect ping --destination celery@$HOSTNAME --json"
               ]
-            initialDelaySeconds: {{ .Values.fides.startupTimeSeconds | default 30 }}
+            initialDelaySeconds: {{ $.Values.fides.startupTimeSeconds | default 30 }}
             periodSeconds: 60
-            timeoutSeconds: {{ .Values.fides.healthCheckTimeoutSeconds | default 5 }}
+            timeoutSeconds: {{ $.Values.fides.healthCheckTimeoutSeconds | default 5 }}
           volumeMounts:
           - name: {{ $volume }}
             mountPath: {{ $configPath }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .resources | nindent 12 }}
       volumes:
         - name: {{ $volume }}
           configMap:
-            name: {{ include "fides.worker.tomlConfigMapName" . }}
-      {{- with .Values.nodeSelector }}
+            name: {{ include "fides.worker.tomlConfigMapName" $ }}
+      {{- with $.Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with $.Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with $.Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+---
+{{- end }}
+{{- end }}
 {{- end }}

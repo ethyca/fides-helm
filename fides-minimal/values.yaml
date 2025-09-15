@@ -31,6 +31,8 @@ fides:
         value: "false"
       - name: FIDES__REDIS__SSL_CERT_REQS # Accepted values include: none, optional and require.
         value: "none"
+      - name: FIDES__EXECUTION__USE_DSR_3_0
+        value: "true"
       # Additional environment variables may be declared here.
     # fides.configuration.additionalEnvVarsSecret is an optional parameter representing the name of an existing secret containing environment variables to pass into the Fides containers.
     additionalEnvVarsSecret: ""
@@ -53,10 +55,50 @@ fides:
   startupTimeSeconds: 30
   # fides.healthCheckTimeoutSeconds configures the timeoutSeconds of the liveness and readiness probes.
   healthCheckTimeoutSeconds: 5
-  workers:
-    # fides.workers.count determines how many workers the deployment will use to process DSRs.
-    # To disable workers, set count to 0. This should be set to at least 1 in production environments.
-    count: 0
+  # fides.workerConfiguration configures the Celery workers that process background tasks.
+  # For fidesplus deployments, specialized workers (dsr, consent, other) are automatically enabled.
+  workerConfiguration:
+    workers:
+    - name: general
+      count: 1
+      resources:
+        limits:
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+    # Fidesplus workers - automatically enabled when using ethyca/fidesplus
+    - name: dsr
+      count: 0
+      queues:
+      - fides.dsr
+      resources:
+        limits:
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+    - name: consent
+      count: 0
+      queues:
+      - fides.privacy_preferences
+      resources:
+        limits:
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+    - name: other
+      count: 0
+      excludeQueues:
+      - fides.dsr
+      - fides.privacy_preferences
+      resources:
+        limits:
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
 
 # privacyCenter is the end-user facing application where data subjects can submit privacy requests.
 privacyCenter:

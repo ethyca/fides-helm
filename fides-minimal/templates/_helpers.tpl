@@ -167,7 +167,7 @@ The set of environment variables for Fides and workers
 {{- $redisDeployment := .Values.redis }}
 {{- $pgDeployment := .Values.postgresql }}
 {{- with .Values.fides.configuration }}
-{{- .additionalEnvVars | toYaml }}
+{{- include "fides.processedEnvVars" $ }}
 - name: FIDES__DATABASE__SERVER
   valueFrom:
     secretKeyRef:
@@ -208,5 +208,41 @@ The set of environment variables for Fides and workers
     secretKeyRef:
       name: {{ .redisSecretName }}
       key: REDIS_PASSWORD
+{{- end }}
+{{- end }}
+
+{{/*
+Detect if fidesplus is being used based on the repository name
+*/}}
+{{- define "fides.isFidesplus" -}}
+{{- if contains "fidesplus" (.Values.fides.image.repository | lower) -}}
+true
+{{- else -}}
+false
+{{- end -}}
+{{- end }}
+
+{{/*
+Get processed environment variables with additional settings
+*/}}
+{{- define "fides.processedEnvVars" -}}
+{{- $envVars := .Values.fides.configuration.additionalEnvVars | default list }}
+{{- $hiddenEnvVar := dict "name" "FIDES__EXECUTION__MONITOR_CELERY_TASKS_ENABLED" "value" "true" }}
+{{- $envVars = append $envVars $hiddenEnvVar }}
+{{- $envVars | toYaml }}
+{{- end }}
+
+{{/*
+Validates that all worker types have unique names. Fails if duplicate names are found.
+*/}}
+{{- define "fides.worker.validateUniqueNames" -}}
+{{- $workers := .Values.fides.workerConfiguration.workers | default list }}
+{{- $names := dict }}
+{{- range $workers }}
+{{- if hasKey $names .name }}
+{{- fail (printf "Duplicate worker name found: '%s'. Worker names must be unique" .name) }}
+{{- else }}
+{{- $_ := set $names .name "used" }}
+{{- end }}
 {{- end }}
 {{- end }}
