@@ -61,49 +61,34 @@ fides:
   # fides.healthCheckTimeoutSeconds configures the timeoutSeconds of the liveness and readiness probes.
   healthCheckTimeoutSeconds: 5
   # fides.workerConfiguration configures the Celery workers that process background tasks.
-  # For fidesplus deployments, specialized workers (dsr, consent, other) are automatically enabled.
+  # 
+  # DEFAULT WORKER CONFIGURATION:
+  # Both Fides and Fidesplus deployments automatically get:
+  #   - 1 DSR worker
+  #   - 1 other worker  
+  #
+  # Fidesplus deployments additionally get:
+  #   - 1 classification worker
+  #   - 1 helios worker
+  #   - 1 consent worker
+  #
+  # To override defaults, explicitly define workers below. To disable a worker, set count: 0.
+  # For more information, see: https://www.ethyca.com/docs/dev-docs/get-started/advanced#running-workers
   workerConfiguration:
-    workers:
-    - name: general
-      count: 1
-      resources:
-        limits:
-          memory: 512Mi
-        requests:
-          cpu: 100m
-          memory: 256Mi
-    # Fidesplus workers - automatically enabled when using ethyca/fidesplus
-    - name: dsr
-      count: 0
-      queues:
-      - fides.dsr
-      resources:
-        limits:
-          memory: 512Mi
-        requests:
-          cpu: 100m
-          memory: 256Mi
-    - name: consent
-      count: 0
-      queues:
-      - fides.privacy_preferences
-      resources:
-        limits:
-          memory: 512Mi
-        requests:
-          cpu: 100m
-          memory: 256Mi
-    - name: other
-      count: 0
-      excludeQueues:
-      - fides.dsr
-      - fides.privacy_preferences
-      resources:
-        limits:
-          memory: 512Mi
-        requests:
-          cpu: 100m
-          memory: 256Mi
+    workers: []
+    # Example worker override:
+    # - name: other
+    #   count: 1
+    #   excludeQueues:
+    #   - fides.dsr
+    #   - fides.privacy_preferences
+    #   resources:
+    #     limits:
+    #       memory: 512Mi
+    #     requests:
+    #       cpu: 100m
+    #       memory: 256Mi
+
   resources:
     {}
     # If you do want to specify resources for Fides, uncomment the following

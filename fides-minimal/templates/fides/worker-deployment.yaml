@@ -1,18 +1,49 @@
 {{- include "fides.worker.validateUniqueNames" . }}
-{{- $workers := .Values.fides.workerConfiguration.workers | default list }}
-{{- $_ := set $ "worker" ( ge (len $workers) 1) }}
+{{- $userWorkers := .Values.fides.workerConfiguration.workers | default list }}
 {{- $isFidesplus := include "fides.isFidesplus" . }}
-{{- if $.worker }}
-{{- range $workers }}
-{{- $workerCount := .count }}
+
+{{/* Build default workers list */}}
+{{- $defaultWorkers := list }}
+{{/* Both Fides and Fidesplus get DSR and other workers */}}
+{{- $defaultWorkers = list 
+  (dict "name" "dsr" "count" 1 "queues" (list "fides.dsr") "resources" (dict "limits" (dict "memory" "512Mi") "requests" (dict "cpu" "100m" "memory" "256Mi")))
+  (dict "name" "other" "count" 1 "excludeQueues" (list "fides.dsr" "fides.privacy_preferences") "resources" (dict "limits" (dict "memory" "512Mi") "requests" (dict "cpu" "100m" "memory" "256Mi")))
+}}
+{{/* Fidesplus additionally gets classification, helios, and consent workers */}}
 {{- if eq $isFidesplus "true" }}
-  {{- if eq .name "general" }}
-    {{- $workerCount = 0 }}
-  {{- else if or (eq .name "dsr") (eq .name "consent") (eq .name "other") }}
-    {{- $workerCount = 1 }}
-  {{- end }}
+{{- $defaultWorkers = concat $defaultWorkers (list
+  (dict "name" "classification" "count" 1 "queues" (list "fidesplus.discovery_monitors_classification") "resources" (dict "limits" (dict "memory" "512Mi") "requests" (dict "cpu" "100m" "memory" "256Mi")))
+  (dict "name" "helios" "count" 1 "queues" (list "fidesplus.discovery_monitors_promotion" "fidesplus.discovery_monitors_detection") "resources" (dict "limits" (dict "memory" "512Mi") "requests" (dict "cpu" "100m" "memory" "256Mi")))
+  (dict "name" "consent" "count" 1 "queues" (list "fides.privacy_preferences" "fides.consent_webhooks") "resources" (dict "limits" (dict "memory" "512Mi") "requests" (dict "cpu" "100m" "memory" "256Mi")))
+) }}
 {{- end }}
-{{- if gt ($workerCount | int) 0 }}
+
+{{/* Merge user workers with defaults */}}
+{{- $mergedWorkers := list }}
+{{- $userWorkerNames := dict }}
+{{- range $userWorkers }}
+{{- $_ := set $userWorkerNames .name true }}
+{{- $mergedWorkers = append $mergedWorkers . }}
+{{- end }}
+{{- range $defaultWorkers }}
+{{- if not (hasKey $userWorkerNames .name) }}
+{{- $mergedWorkers = append $mergedWorkers . }}
+{{- end }}
+{{- end }}
+
+{{/* Check if we have any active workers */}}
+{{- $hasActiveWorkers := false }}
+{{- range $mergedWorkers }}
+{{- if gt (.count | int) 0 }}
+{{- $hasActiveWorkers = true }}
+{{- end }}
+{{- end }}
+{{- $_ := set $ "worker" $hasActiveWorkers }}
+
+{{- if $.worker }}
+{{- range $mergedWorkers }}
+{{- $workerCount := .count | int }}
+{{- if gt $workerCount 0 }}
 {{- $volume := "config" }}
 {{- $configPath := "/etc/fides/config" }}
 apiVersion: apps/v1
