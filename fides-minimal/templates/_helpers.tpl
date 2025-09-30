@@ -150,11 +150,33 @@ Create the name of the config map to store the fides.toml file.
 List of CORS origins, concatenated, deduplicated, and formatted.
 */}}
 {{- define "fides.corsOrigins" -}}
-{{ $cors := list (printf "https://%s" .Values.privacyCenter.publicHostname | quote ) (printf "https://%s" .Values.fides.publicHostname | quote) }}
-{{- range (.Values.fides.configuration.additionalCORSOrigins | compact) }}
-  {{- $cors = . | quote | append $cors }}
+{{- $cors := list }}
+
+{{- if eq .Values.fides.service.type "LoadBalancer" }}
+  {{- if .Values.fides.publicHostname }}
+    {{- $cors = append $cors (printf "http://%s" .Values.fides.publicHostname | quote) }}
+    {{- $cors = append $cors (printf "https://%s" .Values.fides.publicHostname | quote) }}
+  {{- end }}
+  {{- if and .Values.privacyCenter.enabled .Values.privacyCenter.publicHostname }}
+    {{- $cors = append $cors (printf "http://%s" .Values.privacyCenter.publicHostname | quote) }}
+    {{- $cors = append $cors (printf "https://%s" .Values.privacyCenter.publicHostname | quote) }}
+  {{- end }}
+  {{- $cors = append $cors ("http://localhost:8080" | quote) }}
+  {{- $cors = append $cors ("http://localhost:3000" | quote) }}
+{{- else }}
+  {{- if .Values.privacyCenter.publicHostname }}
+    {{- $cors = append $cors (printf "https://%s" .Values.privacyCenter.publicHostname | quote) }}
+  {{- end }}
+  {{- if .Values.fides.publicHostname }}
+    {{- $cors = append $cors (printf "https://%s" .Values.fides.publicHostname | quote) }}
+  {{- end }}
 {{- end }}
-{{ $cors = $cors | uniq }}
+
+{{- range (.Values.fides.configuration.additionalCORSOrigins | compact) }}
+  {{- $cors = append $cors (. | quote) }}
+{{- end }}
+
+{{- $cors = $cors | compact | uniq }}
 {{ printf "[%s]" (join "," $cors) }}
 {{- end }}
 
