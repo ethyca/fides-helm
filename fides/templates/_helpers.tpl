@@ -152,37 +152,24 @@ List of CORS origins, concatenated, deduplicated, and formatted.
 {{- define "fides.corsOrigins" -}}
 {{- $cors := list }}
 
-{{- if and (eq .Values.fides.service.type "LoadBalancer") .Values.fides.configuration.additionalCORSOrigins }}
-  {{- range (.Values.fides.configuration.additionalCORSOrigins | compact) }}
-    {{- $cors = append $cors (. | quote) }}
+{{- if .Values.privacyCenter.publicHostname }}
+  {{- $cors = append $cors (printf "https://%s" .Values.privacyCenter.publicHostname | quote) }}
+{{- end }}
+{{- if .Values.fides.publicHostname }}
+  {{- $cors = append $cors (printf "https://%s" .Values.fides.publicHostname | quote) }}
+{{- end }}
+
+{{- if eq .Values.fides.service.type "LoadBalancer" }}
+  {{- if .Values.fides.publicHostname }}
+    {{- $cors = append $cors (printf "http://%s" .Values.fides.publicHostname | quote) }}
   {{- end }}
-{{- else }}
-  {{- if eq .Values.fides.service.type "LoadBalancer" }}
-    {{- if .Values.privacyCenter.publicHostname }}
-      {{- $cors = append $cors (printf "https://%s" .Values.privacyCenter.publicHostname | quote) }}
-    {{- end }}
-    {{- if .Values.fides.publicHostname }}
-      {{- $cors = append $cors (printf "https://%s" .Values.fides.publicHostname | quote) }}
-    {{- end }}
-    {{- if .Values.fides.publicHostname }}
-      {{- $cors = append $cors (printf "http://%s" .Values.fides.publicHostname | quote) }}
-    {{- end }}
-    {{- if and .Values.privacyCenter.enabled .Values.privacyCenter.publicHostname }}
-      {{- $cors = append $cors (printf "http://%s" .Values.privacyCenter.publicHostname | quote) }}
-    {{- end }}
-    {{- $cors = append $cors ("http://localhost:8080" | quote) }}
-    {{- $cors = append $cors ("http://localhost:3000" | quote) }}
-  {{- else }}
-    {{- if .Values.privacyCenter.publicHostname }}
-      {{- $cors = append $cors (printf "https://%s" .Values.privacyCenter.publicHostname | quote) }}
-    {{- end }}
-    {{- if .Values.fides.publicHostname }}
-      {{- $cors = append $cors (printf "https://%s" .Values.fides.publicHostname | quote) }}
-    {{- end }}
+  {{- if and .Values.privacyCenter.enabled .Values.privacyCenter.publicHostname }}
+    {{- $cors = append $cors (printf "http://%s" .Values.privacyCenter.publicHostname | quote) }}
   {{- end }}
-  {{- range (.Values.fides.configuration.additionalCORSOrigins | compact) }}
-    {{- $cors = append $cors (. | quote) }}
-  {{- end }}
+{{- end }}
+
+{{- range (.Values.fides.configuration.additionalCORSOrigins | compact) }}
+  {{- $cors = append $cors (. | quote) }}
 {{- end }}
 
 {{- $cors = $cors | compact | uniq }}
