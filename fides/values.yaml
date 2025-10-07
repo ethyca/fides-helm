@@ -36,6 +36,8 @@ fides:
         value: "false"
       - name: FIDES__REDIS__SSL_CERT_REQS # Accepted values include: none, optional and require.
         value: "none"
+      - name: FIDES__EXECUTION__USE_DSR_3_0
+        value: "true"
       # Additional environment variables may be declared here.
     # fides.configuration.additionalEnvVarsSecret is an optional parameter representing the name of an existing secret containing environment variables to pass into the Fides containers.
     additionalEnvVarsSecret: ""
@@ -58,19 +60,35 @@ fides:
   startupTimeSeconds: 30
   # fides.healthCheckTimeoutSeconds configures the timeoutSeconds of the liveness and readiness probes.
   healthCheckTimeoutSeconds: 5
-  workers:
-    # fides.workers.count determines how many workers the deployment will use to process DSRs.
-    # To disable workers, set count to 0. This should be set to at least 1 in production environments.
-    count: 0
-    resources: {}
-    # If you do want to specify resources for the worker, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    # limits:
-    #   cpu: 100m
-    #   memory: 2048Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 2048Mi
+  # fides.workerConfiguration configures the Celery workers that process background tasks.
+  # 
+  # DEFAULT WORKER CONFIGURATION:
+  # Both Fides and Fidesplus deployments automatically get:
+  #   - 1 DSR worker
+  #   - 1 other worker  
+  #
+  # Fidesplus deployments additionally get:
+  #   - 1 classification worker
+  #   - 1 helios worker
+  #   - 1 consent worker
+  #
+  # To override defaults, explicitly define workers below. To disable a worker, set count: 0.
+  # For more information, see: https://www.ethyca.com/docs/dev-docs/get-started/advanced#running-workers
+  workerConfiguration:
+    workers: []
+    # Example worker override:
+    # - name: other
+    #   count: 1
+    #   excludeQueues:
+    #   - fides.dsr
+    #   - fides.privacy_preferences
+    #   resources:
+    #     limits:
+    #       memory: 512Mi
+    #     requests:
+    #       cpu: 100m
+    #       memory: 256Mi
+
   resources:
     {}
     # If you do want to specify resources for Fides, uncomment the following
@@ -126,10 +144,18 @@ privacyCenter:
 postgresql:
   # postgresql.deployPostgres configures whether to install and configure the Bitnami Postgresql Helm chart
   deployPostgres: false
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/postgresql
+    tag: "15.3.0-debian-11-r7"
 
 redis:
   # redis.deployRedis configures whether to install and configure the Bitnami Redis Helm chart
   deployRedis: false
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/redis
+    tag: "7.0.11-debian-11-r12"
 
 s3:
   # s3.createS3Bucket creates an S3 bucket to be used as a Fides storage destination.
