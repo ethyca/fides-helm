@@ -144,10 +144,18 @@ privacyCenter:
 postgresql:
   # postgresql.deployPostgres configures whether to install and configure the Bitnami Postgresql Helm chart
   deployPostgres: false
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/postgresql
+    tag: "15.3.0-debian-11-r7"
 
 redis:
   # redis.deployRedis configures whether to install and configure the Bitnami Redis Helm chart
   deployRedis: false
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/redis
+    tag: "7.0.11-debian-11-r12"
 
 s3:
   # s3.createS3Bucket creates an S3 bucket to be used as a Fides storage destination.

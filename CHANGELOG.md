@@ -20,7 +20,13 @@ The types of changes are:
 
 ### Added
 
+- Add support for Worker differentiation
+- Add default deployments for each worker, unless overridden
+- Add support for loadbalancers to work with http
+
 ### Fixed
+
+- Switch to bitnami legacy chart override
 
 ## [0.17.1](https://github.com/ethyca/fides-helm/compare/fides-0.17.0...fides-0.17.1)
 
