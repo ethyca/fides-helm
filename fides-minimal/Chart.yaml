@@ -1,6 +1,6 @@
 apiVersion: v2
 name: fides-minimal
-version: 0.16.1
+version: 0.17.0
 appVersion: "2.48.1"
 description: Fides is an open-source privacy engineering platform for managing the fulfillment of data privacy requests in your runtime environment, and the enforcement of privacy regulations in your code. This version of the Helm chart removes some excess features such as the lookup function which may not be available in all cases.
 type: application
