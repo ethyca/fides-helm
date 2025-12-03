@@ -6,15 +6,15 @@
 {{- $defaultWorkers := list }}
 {{/* Both Fides and Fidesplus get DSR and other workers */}}
 {{- $defaultWorkers = list 
-  (dict "name" "dsr" "count" 1 "queues" (list "fides.dsr") "resources" (dict "limits" (dict "memory" "512Mi") "requests" (dict "cpu" "100m" "memory" "256Mi")))
-  (dict "name" "other" "count" 1 "excludeQueues" (list "fides.dsr" "fides.privacy_preferences") "resources" (dict "limits" (dict "memory" "512Mi") "requests" (dict "cpu" "100m" "memory" "256Mi")))
+  (dict "name" "dsr" "count" 1 "queues" (list "fides.dsr") "resources" (dict "limits" (dict "cpu" "1000m" "memory" "4Gi") "requests" (dict "cpu" "500m" "memory" "1Gi")))
+  (dict "name" "other" "count" 1 "excludeQueues" (list "fides.dsr" "fides.privacy_preferences") "resources" (dict "limits" (dict "cpu" "1000m" "memory" "2Gi") "requests" (dict "cpu" "500m" "memory" "1Gi")))
 }}
 {{/* Fidesplus additionally gets classification, helios, and consent workers */}}
 {{- if eq $isFidesplus "true" }}
 {{- $defaultWorkers = concat $defaultWorkers (list
-  (dict "name" "classification" "count" 1 "queues" (list "fidesplus.discovery_monitors_classification") "resources" (dict "limits" (dict "memory" "512Mi") "requests" (dict "cpu" "100m" "memory" "256Mi")))
-  (dict "name" "helios" "count" 1 "queues" (list "fidesplus.discovery_monitors_promotion" "fidesplus.discovery_monitors_detection") "resources" (dict "limits" (dict "memory" "512Mi") "requests" (dict "cpu" "100m" "memory" "256Mi")))
-  (dict "name" "consent" "count" 1 "queues" (list "fides.privacy_preferences" "fides.consent_webhooks") "resources" (dict "limits" (dict "memory" "512Mi") "requests" (dict "cpu" "100m" "memory" "256Mi")))
+  (dict "name" "classification" "count" 1 "queues" (list "fidesplus.discovery_monitors_classification") "resources" (dict "limits" (dict "cpu" "4000m" "memory" "4Gi") "requests" (dict "cpu" "2000m" "memory" "2Gi")))
+  (dict "name" "helios" "count" 1 "queues" (list "fidesplus.discovery_monitors_promotion" "fidesplus.discovery_monitors_detection") "resources" (dict "limits" (dict "cpu" "1000m" "memory" "2Gi") "requests" (dict "cpu" "500m" "memory" "1Gi")))
+  (dict "name" "consent" "count" 1 "queues" (list "fides.privacy_preferences" "fides.consent_webhooks") "resources" (dict "limits" (dict "cpu" "1000m" "memory" "2Gi") "requests" (dict "cpu" "500m" "memory" "750Mi")))
 ) }}
 {{- end }}
 
