@@ -68,7 +68,7 @@ fides:
   #   - 1 consent worker
   #
   # To override defaults, explicitly define workers below. To disable a worker, set count: 0.
-  # For more information, see: https://www.ethyca.com/docs/dev-docs/get-started/advanced#running-workers
+  # For more information, see: https://www.ethyca.com/docs/dev-docs/installation/workers#customizing-workers
   workerConfiguration:
     workers: []
     # Example worker override:
@@ -79,10 +79,11 @@ fides:
     #   - fides.privacy_preferences
     #   resources:
     #     limits:
-    #       memory: 512Mi
+    #       cpu: 1000m
+    #       memory: 2Gi
     #     requests:
-    #       cpu: 100m
-    #       memory: 256Mi
+    #       cpu: 500m
+    #       memory: 1Gi
 
 # privacyCenter is the end-user facing application where data subjects can submit privacy requests.
 privacyCenter:

@@ -22,6 +22,13 @@ The types of changes are:
 
 ### Fixed
 
+## [0.18.1](https://github.com/ethyca/fides-helm/compare/fides-0.18.0...fides-0.18.1)
+
+### Fixed
+
+- Update default resource limits and requests to better allign with actual usage
+- Fix docs links in values.yaml
+
 ## [0.18.0](https://github.com/ethyca/fides-helm/compare/fides-0.17.1...fides-0.18.0)
 
 ### Added
