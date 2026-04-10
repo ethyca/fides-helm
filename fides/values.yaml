@@ -75,6 +75,19 @@ fides:
   # To override defaults, explicitly define workers below. To disable a worker, set count: 0.
   # For more information, see: https://www.ethyca.com/docs/dev-docs/get-started/advanced#running-workers
   workerConfiguration:
+    # useHttpProbe switches the worker liveness probe from a Celery exec command (default)
+    # to an HTTP GET against the in-process health check server on port 9000.
+    # The exec probe spawns a full celery process on each check, which may cause
+    # issues at scale. The HTTP probe avoids that overhead.
+    useHttpProbe: false
+    #
+    # Liveness probe tuning. If not set, falls back to fides.startupTimeSeconds
+    # and fides.healthCheckTimeoutSeconds respectively.
+    # Uncomment to tune these.
+    # initialDelaySeconds: 30
+    # periodSeconds: 60
+    # timeoutSeconds: 5
+    # failureThreshold: 3
     workers: []
     # Example worker override:
     # - name: other
