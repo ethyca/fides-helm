@@ -105,6 +105,12 @@ spec:
             - secretRef: 
                 name: {{ $.Values.fides.configuration.additionalEnvVarsSecret }}
             {{- end }}
+          {{- if $.Values.fides.workerConfiguration.useHttpProbe }}
+          ports:
+            - name: health
+              containerPort: 9000
+              protocol: TCP
+          {{- end }}
           livenessProbe:
             {{- if $.Values.fides.workerConfiguration.useHttpProbe }}
             httpGet:
