@@ -105,16 +105,29 @@ spec:
             - secretRef: 
                 name: {{ $.Values.fides.configuration.additionalEnvVarsSecret }}
             {{- end }}
+          {{- if $.Values.fides.workerConfiguration.useHttpProbe }}
+          ports:
+            - name: health
+              containerPort: 9000
+              protocol: TCP
+          {{- end }}
           livenessProbe:
+            {{- if $.Values.fides.workerConfiguration.useHttpProbe }}
+            httpGet:
+              path: /
+              port: 9000
+            {{- else }}
             exec:
               command: [
                 "bash",
                 "-c",
                 "celery --quiet --no-color --app fides.api.tasks inspect ping --destination celery@$HOSTNAME --json"
               ]
-            initialDelaySeconds: {{ $.Values.fides.startupTimeSeconds | default 30 }}
-            periodSeconds: 60
-            timeoutSeconds: {{ $.Values.fides.healthCheckTimeoutSeconds | default 5 }}
+            {{- end }}
+            initialDelaySeconds: {{ $.Values.fides.workerConfiguration.initialDelaySeconds | default ($.Values.fides.startupTimeSeconds | default 30) }}
+            periodSeconds: {{ $.Values.fides.workerConfiguration.periodSeconds | default 60 }}
+            timeoutSeconds: {{ $.Values.fides.workerConfiguration.timeoutSeconds | default ($.Values.fides.healthCheckTimeoutSeconds | default 5) }}
+            failureThreshold: {{ $.Values.fides.workerConfiguration.failureThreshold | default 3 }}
           volumeMounts:
           - name: {{ include "fides.configVolume" $ }}
             mountPath: {{ include "fides.configPath" $ }}

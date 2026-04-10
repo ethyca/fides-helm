@@ -22,6 +22,17 @@ The types of changes are:
 
 ### Fixed
 
+## [0.19.0](https://github.com/ethyca/fides-helm/compare/fides-0.18.0...fides-0.19.0)
+
+### Added
+
+- Optional support to use HttpGet health check for the Fides workers instead of Celery
+- New `workerConfiguration` values for liveness probe tuning: `useHttpProbe`, `initialDelaySeconds`, `periodSeconds`, `timeoutSeconds`, `failureThreshold`
+
+### Changed
+- Upgrade default Fides version to [`2.82.1`]
+
+
 ## [0.18.0](https://github.com/ethyca/fides-helm/compare/fides-0.17.1...fides-0.18.0)
 
 ### Added
