@@ -29,6 +29,10 @@ The types of changes are:
 - Worker queue and exclude queue annotations: `fid.es/worker-queues` and `fid.es/worker-exclude-queues`
 - Make `task_always_eager` configurable on Fides workers, defaults to `false`.
 
+### Changed
+
+- Upgrade default Fides version to [`2.84.2`](https://github.com/ethyca/fides/releases/tag/2.84.2) (from `2.82.1`)
+
 ## [0.19.0](https://github.com/ethyca/fides-helm/compare/fides-0.18.0...fides-0.19.0)
 
 ### Added
