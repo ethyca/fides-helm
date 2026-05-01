@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/)
 
-To view the Changelog for the Fides code, see the [CHANGELOG.md of the ethyca/fides repository](https://github.com/ethyca/fides/blob/main/CHANGELOG.md).
+To see what's new in Fides, see the [CHANGELOG.md of the ethyca/fides repository](https://github.com/ethyca/fides/blob/main/CHANGELOG.md) and the [Fides release notes](https://www.ethyca.com/docs/releases).
 
 The types of changes are:
 
@@ -16,11 +16,18 @@ The types of changes are:
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities.
 
-## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.18.0...main)
+## [Unreleased](https://github.com/ethyca/fides-helm/compare/fides-0.19.1...main)
 
 ### Added
 
 ### Fixed
+
+## [0.19.1](https://github.com/ethyca/fides-helm/compare/fides-0.19.0...fides-0.19.1)
+
+### Added
+
+- Worker queue and exclude queue annotations: `fid.es/worker-queues` and `fid.es/worker-exclude-queues`
+- Make `task_always_eager` configurable on Fides workers, defaults to `false`.
 
 ## [0.19.0](https://github.com/ethyca/fides-helm/compare/fides-0.18.0...fides-0.19.0)
 
