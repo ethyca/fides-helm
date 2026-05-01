@@ -15,7 +15,7 @@ data:
     [celery]
     event_queue_prefix = "fides_worker"
     task_default_queue = "fides"
-    task_always_eager = false
+    task_always_eager = {{ .Values.fides.workerConfiguration.taskAlwaysEager }}
     redis_socket_keepalive = true
 
     [security]
