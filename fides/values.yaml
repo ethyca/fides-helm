@@ -75,6 +75,10 @@ fides:
   # To override defaults, explicitly define workers below. To disable a worker, set count: 0.
   # For more information, see: https://www.ethyca.com/docs/dev-docs/get-started/advanced#running-workers
   workerConfiguration:
+    # When true, the worker's fides.toml pins celery.task_always_eager = true,
+    # so subtasks spawned within a worker run inline instead of being requeued.
+    # Default false enables proper fan-out across the worker pool.
+    taskAlwaysEager: false
     # useHttpProbe switches the worker liveness probe from a Celery exec command (default)
     # to an HTTP GET against the in-process health check server on port 9000.
     # The exec probe spawns a full celery process on each check, which may cause
