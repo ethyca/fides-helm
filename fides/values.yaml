@@ -72,6 +72,9 @@ fides:
   #   - 1 helios worker
   #   - 1 consent worker
   #
+  # When Temporal is enabled (temporal.deployTemporal or temporal.serverUrl), deployments also get:
+  #   - 1 temporal-dsr worker
+  #
   # To override defaults, explicitly define workers below. To disable a worker, set count: 0.
   # For more information, see: https://www.ethyca.com/docs/dev-docs/get-started/advanced#running-workers
   workerConfiguration:
@@ -169,6 +172,41 @@ redis:
     registry: docker.io
     repository: bitnamilegacy/redis
     tag: "7.0.11-debian-11-r12"
+
+temporal:
+  # temporal.deployTemporal installs the upstream Temporal Helm chart (https://github.com/temporalio/helm-charts)
+  # alongside Fides. Everything under `temporal:` other than the Fides-specific keys below is passed to that chart.
+  # Temporal requires a SQL datastore: configure temporal.server.config.persistence.datastores before enabling it,
+  # see https://github.com/temporalio/helm-charts/blob/main/charts/temporal/values/values.postgresql.yaml.
+  deployTemporal: false
+  # temporal.serverUrl points Fides at an existing Temporal frontend (host:port). Leave empty to use the
+  # frontend deployed by temporal.deployTemporal. Setting either enables the Temporal workers.
+  serverUrl: ""
+  # temporal.workflowEngine sets FIDES__EXECUTION__USE_TEMPORAL_WORKFLOW_ENGINE. Accepted values: "true", "shadow".
+  workflowEngine: "true"
+  # The Temporal worker is configured with the other workers in fides.workerConfiguration.workers, under the
+  # name temporal-dsr.
+  server:
+    config:
+      namespaces:
+        # Fides runs its workflows in the "default" namespace (FIDES__TEMPORAL__NAMESPACE).
+        create: true
+    #   persistence:
+    #     datastores:
+    #       default:
+    #         sql:
+    #           pluginName: postgres12
+    #           connectAddr: "postgres.example.com:5432"
+    #           user: temporal
+    #           existingSecret: temporal-db-credentials
+    #           databaseName: temporal
+    #       visibility:
+    #         sql:
+    #           pluginName: postgres12
+    #           connectAddr: "postgres.example.com:5432"
+    #           user: temporal
+    #           existingSecret: temporal-db-credentials
+    #           databaseName: temporal_visibility
 
 s3:
   # s3.createS3Bucket creates an S3 bucket to be used as a Fides storage destination.

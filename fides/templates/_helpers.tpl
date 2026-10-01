@@ -288,6 +288,24 @@ Redis CA path
 {{- end }}
 
 {{/*
+Temporal frontend address (host:port), or empty when Temporal is not enabled.
+Mirrors the upstream chart's "temporal.fullname", which can't be called with the parent chart's context.
+*/}}
+{{- define "fides.temporal.serverUrl" -}}
+{{- if .Values.temporal.serverUrl -}}
+{{- .Values.temporal.serverUrl -}}
+{{- else if .Values.temporal.deployTemporal -}}
+{{- $fullname := printf "%s-temporal" .Release.Name -}}
+{{- if .Values.temporal.fullnameOverride -}}
+{{- $fullname = .Values.temporal.fullnameOverride -}}
+{{- else if contains "temporal" .Release.Name -}}
+{{- $fullname = .Release.Name -}}
+{{- end -}}
+{{- printf "%s-frontend:%d" ($fullname | trunc 63 | trimSuffix "-") (dig "server" "frontend" "service" "port" 7233 .Values.temporal | int) -}}
+{{- end -}}
+{{- end }}
+
+{{/*
 Detect if fidesplus is being used based on the repository name
 */}}
 {{- define "fides.isFidesplus" -}}
@@ -305,6 +323,11 @@ Get processed environment variables with additional settings
 {{- $envVars := .Values.fides.configuration.additionalEnvVars | default list }}
 {{- $hiddenEnvVar := dict "name" "FIDES__EXECUTION__MONITOR_CELERY_TASKS_ENABLED" "value" "true" }}
 {{- $envVars = append $envVars $hiddenEnvVar }}
+{{- $temporalServerUrl := include "fides.temporal.serverUrl" . }}
+{{- if $temporalServerUrl }}
+{{- $envVars = append $envVars (dict "name" "FIDES__TEMPORAL__SERVER_URL" "value" $temporalServerUrl) }}
+{{- $envVars = append $envVars (dict "name" "FIDES__EXECUTION__USE_TEMPORAL_WORKFLOW_ENGINE" "value" (.Values.temporal.workflowEngine | toString)) }}
+{{- end }}
 {{- $envVars | toYaml }}
 {{- end }}
 

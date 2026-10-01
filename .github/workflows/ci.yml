@@ -21,6 +21,7 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo add eks https://aws.github.io/eks-charts
+          helm repo add temporal https://go.temporal.io/helm-charts
       - name: Lint Helm - Fides
         working-directory: ./fides/
         id: helm-lint

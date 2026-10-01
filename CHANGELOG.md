@@ -20,6 +20,9 @@ The types of changes are:
 
 ### Added
 
+- Optional Temporal server as a chart dependency (`temporal.deployTemporal`), or an external one via `temporal.serverUrl`
+- `temporal-dsr` worker when Temporal is enabled
+
 ### Fixed
 
 ## [0.19.0](https://github.com/ethyca/fides-helm/compare/fides-0.18.0...fides-0.19.0)
