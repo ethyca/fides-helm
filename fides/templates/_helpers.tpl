@@ -288,6 +288,26 @@ Redis CA path
 {{- end }}
 
 {{/*
+Temporal frontend address (host:port), or empty when Temporal is not enabled.
+Mirrors the upstream chart's "temporal.fullname", which can't be called with the parent chart's context.
+*/}}
+{{- define "fides.temporal.serverUrl" -}}
+{{- if .Values.temporal.serverUrl -}}
+{{- .Values.temporal.serverUrl -}}
+{{- else if .Values.temporal.deployTemporal -}}
+{{- $name := .Values.temporal.nameOverride | default "temporal" -}}
+{{- $fullname := printf "%s-%s" .Release.Name $name -}}
+{{- if .Values.temporal.fullnameOverride -}}
+{{- $fullname = .Values.temporal.fullnameOverride -}}
+{{- else if contains $name .Release.Name -}}
+{{- $fullname = .Release.Name -}}
+{{- end -}}
+{{- $fullname = $fullname | trunc 63 | trimSuffix "-" | trunc (sub 62 (len "frontend") | int) | trimSuffix "-" -}}
+{{- printf "%s-frontend:%d" $fullname (dig "server" "frontend" "service" "port" 7233 .Values.temporal | int) -}}
+{{- end -}}
+{{- end }}
+
+{{/*
 Detect if fidesplus is being used based on the repository name
 */}}
 {{- define "fides.isFidesplus" -}}
@@ -303,8 +323,22 @@ Get processed environment variables with additional settings
 */}}
 {{- define "fides.processedEnvVars" -}}
 {{- $envVars := .Values.fides.configuration.additionalEnvVars | default list }}
-{{- $hiddenEnvVar := dict "name" "FIDES__EXECUTION__MONITOR_CELERY_TASKS_ENABLED" "value" "true" }}
-{{- $envVars = append $envVars $hiddenEnvVar }}
+{{- $chartEnvVars := list (dict "name" "FIDES__EXECUTION__MONITOR_CELERY_TASKS_ENABLED" "value" "true") }}
+{{- $temporalServerUrl := include "fides.temporal.serverUrl" . }}
+{{- if $temporalServerUrl }}
+{{- $chartEnvVars = append $chartEnvVars (dict "name" "FIDES__TEMPORAL__SERVER_URL" "value" $temporalServerUrl) }}
+{{- $chartEnvVars = append $chartEnvVars (dict "name" "FIDES__EXECUTION__USE_TEMPORAL_WORKFLOW_ENGINE" "value" (.Values.temporal.workflowEngine | toString)) }}
+{{- end }}
+{{- /* A user-set additionalEnvVar wins over the chart's value for the same name */}}
+{{- $userNames := dict }}
+{{- range $envVars }}
+{{- $_ := set $userNames .name true }}
+{{- end }}
+{{- range $chartEnvVars }}
+{{- if not (hasKey $userNames .name) }}
+{{- $envVars = append $envVars . }}
+{{- end }}
+{{- end }}
 {{- $envVars | toYaml }}
 {{- end }}
 

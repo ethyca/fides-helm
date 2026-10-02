@@ -23,6 +23,8 @@ Before deploying the Helm chart, you will need the several dependencies, dependi
     * `REDIS_HOST`
     * `REDIS_PORT` - \[Optional - Defaults to `6379`\]
     * `REDIS_PASSWORD`
+* If `temporal.deployTemporal` is set to `true`
+  * A PostgreSQL (or MySQL) database for Temporal, configured under `temporal.server.config.persistence.datastores`
 * If `s3.createS3Bucket` is set to `true`
   * [AWS Controllers for Kubernetes for S3](https://aws-controllers-k8s.github.io/community/docs/user-docs/install/)
 

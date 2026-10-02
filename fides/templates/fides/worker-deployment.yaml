@@ -17,13 +17,33 @@
   (dict "name" "consent" "count" 1 "queues" (list "fides.privacy_preferences" "fides.consent_webhooks") "resources" (dict "limits" (dict "memory" "512Mi") "requests" (dict "cpu" "100m" "memory" "256Mi")))
 ) }}
 {{- end }}
+{{- /* Temporal workers run a fides subcommand instead of a Celery worker */}}
+{{- if include "fides.temporal.serverUrl" . }}
+{{- $defaultWorkers = append $defaultWorkers (dict "name" "temporal-dsr" "count" 1 "command" "temporal-worker" "resources" (dict "limits" (dict "memory" "512Mi") "requests" (dict "cpu" "100m" "memory" "256Mi"))) }}
+{{- end }}
+{{- $defaultCommands := dict }}
+{{- range $defaultWorkers }}
+{{- if hasKey . "command" }}
+{{- $_ := set $defaultCommands .name .command }}
+{{- end }}
+{{- end }}
+{{- range $userWorkers }}
+{{- if and (eq .name "temporal-dsr") (gt (.count | int) 0) (not (hasKey $defaultCommands .name)) }}
+{{- fail "fides.workerConfiguration.workers overrides 'temporal-dsr', but Temporal is not enabled. Set temporal.serverUrl or temporal.deployTemporal, or remove the override" }}
+{{- end }}
+{{- end }}
 
 {{/* Merge user workers with defaults */}}
 {{- $mergedWorkers := list }}
 {{- $userWorkerNames := dict }}
 {{- range $userWorkers }}
 {{- $_ := set $userWorkerNames .name true }}
-{{- $mergedWorkers = append $mergedWorkers . }}
+{{- /* An override of a Temporal worker keeps its command */}}
+{{- $worker := . }}
+{{- if and (hasKey $defaultCommands .name) (not (hasKey . "command")) }}
+{{- $worker = merge (dict "command" (get $defaultCommands .name)) . }}
+{{- end }}
+{{- $mergedWorkers = append $mergedWorkers $worker }}
 {{- end }}
 {{- range $defaultWorkers }}
 {{- if not (hasKey $userWorkerNames .name) }}
@@ -87,7 +107,11 @@ spec:
             {{- fail (printf "Worker '%s' cannot have both --queues and --exclude-queues passed" .name) }}
           {{- end }}
           args:
+            {{- if hasKey . "command" }}
+            - {{ .command }}
+            {{- else }}
             - worker
+            {{- end }}
             {{- if hasKey . "queues" }}
             - {{ printf "--queues=%s" (join "," .queues) }}
             {{- else if hasKey . "excludeQueues" }}
@@ -105,6 +129,8 @@ spec:
             - secretRef: 
                 name: {{ $.Values.fides.configuration.additionalEnvVarsSecret }}
             {{- end }}
+          {{- /* Temporal workers expose no health endpoint; a crashed worker exits and is restarted */}}
+          {{- if not (hasKey . "command") }}
           {{- if $.Values.fides.workerConfiguration.useHttpProbe }}
           ports:
             - name: health
@@ -128,6 +154,7 @@ spec:
             periodSeconds: {{ $.Values.fides.workerConfiguration.periodSeconds | default 60 }}
             timeoutSeconds: {{ $.Values.fides.workerConfiguration.timeoutSeconds | default ($.Values.fides.healthCheckTimeoutSeconds | default 5) }}
             failureThreshold: {{ $.Values.fides.workerConfiguration.failureThreshold | default 3 }}
+          {{- end }}
           volumeMounts:
           - name: {{ include "fides.configVolume" $ }}
             mountPath: {{ include "fides.configPath" $ }}

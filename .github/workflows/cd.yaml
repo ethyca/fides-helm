@@ -30,6 +30,7 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo add eks https://aws.github.io/eks-charts
+          helm repo add temporal https://go.temporal.io/helm-charts
       - name: Run chart-releaser
         id: release-chart
         uses: helm/chart-releaser-action@v1.5.0
@@ -61,6 +62,7 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo add eks https://aws.github.io/eks-charts
+          helm repo add temporal https://go.temporal.io/helm-charts
       - name: Modify values.yaml
         id: modify-chart
         run: |
