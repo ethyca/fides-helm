@@ -27,6 +27,11 @@
 {{- $_ := set $defaultCommands .name .command }}
 {{- end }}
 {{- end }}
+{{- range $userWorkers }}
+{{- if and (eq .name "temporal-dsr") (gt (.count | int) 0) (not (hasKey $defaultCommands .name)) }}
+{{- fail "fides.workerConfiguration.workers overrides 'temporal-dsr', but Temporal is not enabled. Set temporal.serverUrl or temporal.deployTemporal, or remove the override" }}
+{{- end }}
+{{- end }}
 
 {{/* Merge user workers with defaults */}}
 {{- $mergedWorkers := list }}

@@ -295,13 +295,15 @@ Mirrors the upstream chart's "temporal.fullname", which can't be called with the
 {{- if .Values.temporal.serverUrl -}}
 {{- .Values.temporal.serverUrl -}}
 {{- else if .Values.temporal.deployTemporal -}}
-{{- $fullname := printf "%s-temporal" .Release.Name -}}
+{{- $name := .Values.temporal.nameOverride | default "temporal" -}}
+{{- $fullname := printf "%s-%s" .Release.Name $name -}}
 {{- if .Values.temporal.fullnameOverride -}}
 {{- $fullname = .Values.temporal.fullnameOverride -}}
-{{- else if contains "temporal" .Release.Name -}}
+{{- else if contains $name .Release.Name -}}
 {{- $fullname = .Release.Name -}}
 {{- end -}}
-{{- printf "%s-frontend:%d" ($fullname | trunc 63 | trimSuffix "-") (dig "server" "frontend" "service" "port" 7233 .Values.temporal | int) -}}
+{{- $fullname = $fullname | trunc 63 | trimSuffix "-" | trunc (sub 62 (len "frontend") | int) | trimSuffix "-" -}}
+{{- printf "%s-frontend:%d" $fullname (dig "server" "frontend" "service" "port" 7233 .Values.temporal | int) -}}
 {{- end -}}
 {{- end }}
 
@@ -321,12 +323,21 @@ Get processed environment variables with additional settings
 */}}
 {{- define "fides.processedEnvVars" -}}
 {{- $envVars := .Values.fides.configuration.additionalEnvVars | default list }}
-{{- $hiddenEnvVar := dict "name" "FIDES__EXECUTION__MONITOR_CELERY_TASKS_ENABLED" "value" "true" }}
-{{- $envVars = append $envVars $hiddenEnvVar }}
+{{- $chartEnvVars := list (dict "name" "FIDES__EXECUTION__MONITOR_CELERY_TASKS_ENABLED" "value" "true") }}
 {{- $temporalServerUrl := include "fides.temporal.serverUrl" . }}
 {{- if $temporalServerUrl }}
-{{- $envVars = append $envVars (dict "name" "FIDES__TEMPORAL__SERVER_URL" "value" $temporalServerUrl) }}
-{{- $envVars = append $envVars (dict "name" "FIDES__EXECUTION__USE_TEMPORAL_WORKFLOW_ENGINE" "value" (.Values.temporal.workflowEngine | toString)) }}
+{{- $chartEnvVars = append $chartEnvVars (dict "name" "FIDES__TEMPORAL__SERVER_URL" "value" $temporalServerUrl) }}
+{{- $chartEnvVars = append $chartEnvVars (dict "name" "FIDES__EXECUTION__USE_TEMPORAL_WORKFLOW_ENGINE" "value" (.Values.temporal.workflowEngine | toString)) }}
+{{- end }}
+{{- /* A user-set additionalEnvVar wins over the chart's value for the same name */}}
+{{- $userNames := dict }}
+{{- range $envVars }}
+{{- $_ := set $userNames .name true }}
+{{- end }}
+{{- range $chartEnvVars }}
+{{- if not (hasKey $userNames .name) }}
+{{- $envVars = append $envVars . }}
+{{- end }}
 {{- end }}
 {{- $envVars | toYaml }}
 {{- end }}
